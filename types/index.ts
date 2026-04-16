@@ -1,0 +1,109 @@
+export type ScenarioId = "stay_us" | "return_china";
+
+export type DimensionId =
+  | "career"
+  | "salary_cost"
+  | "immigration"
+  | "family_emotion"
+  | "lifestyle"
+  | "long_term";
+
+export type Dimension = {
+  id: DimensionId;
+  label: string;
+  shortLabel: string;
+  description: string;
+};
+
+export type QuestionOption = {
+  id: string;
+  label: string;
+  stay_us_score: number;
+  return_china_score: number;
+  note?: string;
+};
+
+export type Question = {
+  id: string;
+  dimensionId: DimensionId;
+  prompt: string;
+  helpText?: string;
+  options: QuestionOption[];
+};
+
+export type Answers = Record<string, string>;
+
+export type Weights = Record<DimensionId, number>;
+
+export type RawDimensionScore = {
+  dimensionId: DimensionId;
+  stay_us: number;
+  return_china: number;
+  maxPossible: number;
+};
+
+export type NormalizedDimensionScore = {
+  dimensionId: DimensionId;
+  stay_us: number;
+  return_china: number;
+};
+
+export type WeightedTotals = {
+  stay_us: number;
+  return_china: number;
+  difference: number;
+};
+
+export type ConfidenceLevel = "low" | "medium" | "high";
+
+export type RecommendationTemplate = {
+  id: string;
+  scenario: ScenarioId;
+  minDifference: number;
+  summary: string;
+  strengths: string[];
+  risks: string[];
+  nextSteps: string[];
+};
+
+export type RecommendationReport = {
+  recommendedScenario: ScenarioId;
+  confidence: ConfidenceLevel;
+  summary: string;
+  confidenceNote: string;
+  supportingFactors: string[];
+  whyNotOtherPath: string[];
+  tradeoffs: string[];
+  nextSteps: string[];
+  disclaimer: string;
+};
+
+export type AppState = {
+  answers: Answers;
+  weights: Weights;
+};
+
+export type ScoringResult = {
+  rawByDimension: RawDimensionScore[];
+  normalizedByDimension: NormalizedDimensionScore[];
+  weightedTotals: WeightedTotals;
+  contributions: DimensionContribution[];
+  uncertainDimensions: DimensionId[];
+  weightFlipAnalysis: WeightFlipAnalysis;
+  recommendedScenario: ScenarioId;
+  confidence: ConfidenceLevel;
+};
+
+export type DimensionContribution = {
+  dimensionId: DimensionId;
+  rawGap: number;
+  weightedGap: number;
+  favoredScenario: ScenarioId | "tie";
+};
+
+export type WeightFlipAnalysis = {
+  currentTotalGap: number;
+  uncertainDimensionIds: DimensionId[];
+  totalPotentialShift: number;
+  couldFlip: boolean;
+};
