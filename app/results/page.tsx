@@ -85,15 +85,15 @@ export default function ResultsPage() {
         </SectionCard>
 
         <SectionCard title="Dimension comparison" description="This makes it easier to spot where the paths differ.">
-          <DimensionChart scores={scoringResult.normalizedByDimension} />
+          <DimensionChart contributions={scoringResult.contributions} />
         </SectionCard>
       </div>
 
       <SectionCard
         title="Optional radar placeholder"
-        description="This is included now so a future chart library can be added without changing the page structure."
+        description="This gives a quick shape comparison across all six dimensions, but it is secondary to the score and contribution charts."
       >
-        <RadarChart />
+        <RadarChart scores={scoringResult.normalizedByDimension} />
       </SectionCard>
 
       <SectionCard title="Dimension score table" description="A simple table for transparent score review.">

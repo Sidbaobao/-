@@ -1,36 +1,70 @@
 "use client";
 
+import type { EChartsOption } from "echarts";
+import ReactECharts from "echarts-for-react";
+
 type TotalScoreChartClientProps = {
   stayUsScore: number;
   returnChinaScore: number;
 };
 
+const STAY_US_COLOR = "#4F86F7";
+const RETURN_CHINA_COLOR = "#F97316";
+
 export default function TotalScoreChartClient({ stayUsScore, returnChinaScore }: TotalScoreChartClientProps) {
-  return (
-    <div className="space-y-4 rounded-[1.25rem] bg-mist p-5">
-      <p className="text-sm font-medium text-ink/65">Simple placeholder wrapper for a future chart library.</p>
+  const option: EChartsOption = {
+    animationDuration: 500,
+    grid: {
+      top: 12,
+      right: 24,
+      bottom: 12,
+      left: 92
+    },
+    xAxis: {
+      type: "value",
+      max: 100,
+      splitLine: {
+        lineStyle: {
+          color: "#d9e1e7"
+        }
+      },
+      axisLabel: {
+        color: "#506172",
+        fontSize: 11
+      }
+    },
+    yAxis: {
+      type: "category",
+      data: ["Stay in the US", "Return to China"],
+      axisTick: { show: false },
+      axisLine: { show: false },
+      axisLabel: {
+        color: "#132238",
+        fontSize: 12
+      }
+    },
+    series: [
+      {
+        type: "bar",
+        data: [
+          { value: stayUsScore, itemStyle: { color: STAY_US_COLOR } },
+          { value: returnChinaScore, itemStyle: { color: RETURN_CHINA_COLOR } }
+        ],
+        barWidth: 18,
+        label: {
+          show: true,
+          position: "right",
+          color: "#132238",
+          fontSize: 12,
+          formatter: ({ value }) => `${value}`
+        }
+      }
+    ],
+    tooltip: {
+      trigger: "axis",
+      axisPointer: { type: "shadow" }
+    }
+  };
 
-      <div className="space-y-3">
-        <div>
-          <div className="mb-1 flex items-center justify-between text-sm text-ink/70">
-            <span>Stay in the US</span>
-            <span>{stayUsScore}</span>
-          </div>
-          <div className="h-3 rounded-full bg-white">
-            <div className="h-3 rounded-full bg-slateBlue" style={{ width: `${stayUsScore}%` }} />
-          </div>
-        </div>
-
-        <div>
-          <div className="mb-1 flex items-center justify-between text-sm text-ink/70">
-            <span>Return to China</span>
-            <span>{returnChinaScore}</span>
-          </div>
-          <div className="h-3 rounded-full bg-white">
-            <div className="h-3 rounded-full bg-coral" style={{ width: `${returnChinaScore}%` }} />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  return <ReactECharts option={option} style={{ height: "250px", width: "100%" }} opts={{ renderer: "svg" }} />;
 }
