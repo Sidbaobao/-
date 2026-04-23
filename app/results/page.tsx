@@ -90,8 +90,8 @@ export default function ResultsPage() {
       </div>
 
       <SectionCard
-        title="Optional radar placeholder"
-        description="This gives a quick shape comparison across all six dimensions, but it is secondary to the score and contribution charts."
+        title="Shape comparison"
+        description="How the two paths compare across all six dimensions."
       >
         <RadarChart scores={scoringResult.normalizedByDimension} />
       </SectionCard>

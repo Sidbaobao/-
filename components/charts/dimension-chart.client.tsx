@@ -75,11 +75,7 @@ export default function DimensionChartClient({ contributions }: DimensionChartCl
           position: "right",
           color: "#132238",
           fontSize: 11,
-          formatter: ({ value }) => {
-            const numericValue = Number(value);
-            const side = numericValue >= 0 ? "US" : "CN";
-            return `${side} ${Math.abs(numericValue)}`;
-          }
+          formatter: ({ value }) => `${Math.abs(Number(value))}`
         }
       }
     ]
