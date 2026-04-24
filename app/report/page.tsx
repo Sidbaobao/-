@@ -45,13 +45,13 @@ export default function ReportPage() {
     <>
       <PageHeader
         eyebrow="Step 4"
-        title="Recommendation report"
-        description="This page turns the score output into a more readable summary with strengths, risks, and next steps."
+        title="Recommendation memo"
+        description="A compact summary of the current direction, the strongest supporting factors, and the tradeoffs to review before acting."
       />
 
       <ReportSummary report={report} />
 
-      <SectionCard title="Methodology and disclaimer">
+      <SectionCard title="Methodology and disclaimer" variant="subtle">
         <p className="text-sm leading-7 text-ink/75">{report.disclaimer}</p>
       </SectionCard>
 

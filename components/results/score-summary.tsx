@@ -16,20 +16,24 @@ export function ScoreSummary({
   leadDescription
 }: ScoreSummaryProps) {
   return (
-    <div className="grid gap-4 md:grid-cols-3">
-      <div className="rounded-[1.25rem] bg-mist p-5">
-        <p className="text-sm text-ink/60">Stay in the US</p>
-        <p className="mt-2 text-3xl font-semibold text-ink">{stayUsScore}</p>
+    <div className="grid gap-4 lg:grid-cols-[1.15fr_1fr_1fr]">
+      <div className="rounded-xl bg-ink p-5 text-white sm:p-6">
+        <p className="text-sm text-white/70">Current direction</p>
+        <p className="mt-2 text-2xl font-semibold leading-tight">{recommendedLabel}</p>
+        <p className="mt-3 text-sm leading-6 text-white/75">{leadDescription}</p>
+        <p className="mt-4 inline-flex rounded-full bg-white/10 px-3 py-1 text-sm text-white/80">
+          Gap: {difference} points | Confidence: {confidence}
+        </p>
       </div>
-      <div className="rounded-[1.25rem] bg-mist p-5">
-        <p className="text-sm text-ink/60">Return to China</p>
-        <p className="mt-2 text-3xl font-semibold text-ink">{returnChinaScore}</p>
+      <div className="rounded-xl bg-mist p-5 sm:p-6">
+        <p className="text-sm font-medium text-ink/60">Stay in the US</p>
+        <p className="mt-2 text-4xl font-semibold tracking-tight text-ink">{stayUsScore}</p>
+        <p className="mt-2 text-sm leading-6 text-ink/65">Weighted total</p>
       </div>
-      <div className="rounded-[1.25rem] bg-ink p-5 text-white">
-        <p className="text-sm text-white/70">Current recommendation</p>
-        <p className="mt-2 text-xl font-semibold">{recommendedLabel}</p>
-        <p className="mt-2 text-sm text-white/75">Gap: {difference} points | Confidence: {confidence}</p>
-        <p className="mt-2 text-sm leading-6 text-white/75">{leadDescription}</p>
+      <div className="rounded-xl bg-mist p-5 sm:p-6">
+        <p className="text-sm font-medium text-ink/60">Return to China</p>
+        <p className="mt-2 text-4xl font-semibold tracking-tight text-ink">{returnChinaScore}</p>
+        <p className="mt-2 text-sm leading-6 text-ink/65">Weighted total</p>
       </div>
     </div>
   );

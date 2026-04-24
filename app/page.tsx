@@ -9,26 +9,26 @@ export default function HomePage() {
 
       <PageHeader
         eyebrow="How it works"
-        title="A transparent decision flow for an emotionally complex choice"
-        description="The app keeps the method visible: answer explicit questions, decide how much each dimension matters, compare scores, and read a structured report."
+        title="A transparent flow for a high-stakes personal decision"
+        description="The app keeps the method visible at each step, so the recommendation is something you can inspect and question."
       />
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <SectionCard title="1. Questionnaire" description="Answer explicit questions across the six decision dimensions.">
+        <SectionCard title="1. Answer questions" description="Respond to practical prompts across six decision dimensions." variant="subtle">
           <p className="text-sm leading-6 text-ink/75">
-            Each option has separate scores for staying in the US and returning to China, so the logic stays easy to inspect.
+            Each option scores both paths separately, so the logic stays visible instead of hidden.
           </p>
         </SectionCard>
 
-        <SectionCard title="2. Weights" description="Tell the tool what matters more to you right now.">
+        <SectionCard title="2. Set priorities" description="Adjust how much each dimension should influence the result." variant="subtle">
           <p className="text-sm leading-6 text-ink/75">
-            Weights keep the process transparent by showing how much each dimension shapes the final result.
+            Your weights make the recommendation reflect what matters most to you right now.
           </p>
         </SectionCard>
 
-        <SectionCard title="3. Results and Report" description="See the score breakdown and read a structured recommendation.">
+        <SectionCard title="3. Review output" description="Compare scores, drivers, uncertainty, and a memo-style report." variant="subtle">
           <p className="text-sm leading-6 text-ink/75">
-            The report is meant to support reflection, not replace your own judgment or professional advice.
+            The report highlights tradeoffs and next steps rather than treating the result as a final verdict.
           </p>
         </SectionCard>
       </div>

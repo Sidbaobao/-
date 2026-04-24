@@ -24,6 +24,7 @@ export default function QuestionnairePage() {
   const currentAnswers = filterAnswersToCurrent(answers, questions);
   const completedCount = Object.keys(currentAnswers).length;
   const canContinue = completedCount === questions.length;
+  const progressPercent = Math.round((completedCount / questions.length) * 100);
 
   const groupedQuestions = dimensions.map((dimension) => ({
     dimension,
@@ -51,17 +52,25 @@ export default function QuestionnairePage() {
       <PageHeader
         eyebrow="Step 1"
         title="Questionnaire"
-        description="Answer each question based on your real priorities today. You can come back and change any answer later."
+        description="Answer based on your current situation. You can come back and change any response before reviewing results."
       />
 
       <SectionCard
-        title="Progress"
-        description={`${completedCount} of ${questions.length} questions answered. The page will let you continue after all questions are complete.`}
+        title="Your progress"
+        description={
+          canContinue
+            ? "All questions are complete. You can continue to priority weights."
+            : `${completedCount} of ${questions.length} questions answered. Complete the remaining questions to continue.`
+        }
       >
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-sm">
+          <span className="font-medium text-ink">{progressPercent}% complete</span>
+          <span className="text-ink/60">{questions.length - completedCount} remaining</span>
+        </div>
         <div className="h-3 rounded-full bg-mist">
           <div
             className="h-3 rounded-full bg-slateBlue transition-all"
-            style={{ width: `${(completedCount / questions.length) * 100}%` }}
+            style={{ width: `${progressPercent}%` }}
           />
         </div>
       </SectionCard>
@@ -72,6 +81,7 @@ export default function QuestionnairePage() {
             key={group.dimension.id}
             title={group.dimension.label}
             description={group.dimension.description}
+            variant="subtle"
           >
             <div className="space-y-4">
               {group.questions.map((question) => (

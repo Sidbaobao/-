@@ -9,14 +9,18 @@ type WeightSliderProps = {
 };
 
 export function WeightSlider({ dimensionId, label, description, value, onChange }: WeightSliderProps) {
+  const valueLabel = value <= 2 ? "Lower priority" : value === 3 ? "Balanced priority" : "Higher priority";
+
   return (
-    <div className="rounded-[1.25rem] border border-ink/10 bg-mist/60 p-5">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-        <div className="max-w-2xl">
-          <h3 className="text-lg font-semibold text-ink">{label}</h3>
+    <div className="rounded-xl border border-ink/10 bg-white p-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <h3 className="text-base font-semibold leading-7 text-ink sm:text-lg">{label}</h3>
           <p className="text-sm leading-6 text-ink/65">{description}</p>
         </div>
-        <div className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-slateBlue">Weight: {value}</div>
+        <div className="shrink-0 rounded-xl bg-mist px-3 py-2 text-sm font-semibold text-slateBlue">
+          {valueLabel}: {value}
+        </div>
       </div>
 
       <input
@@ -29,9 +33,9 @@ export function WeightSlider({ dimensionId, label, description, value, onChange 
         className="mt-4 w-full"
       />
 
-      <div className="mt-2 flex justify-between text-xs text-ink/55">
-        <span>Lower importance</span>
-        <span>Higher importance</span>
+      <div className="mt-2 flex justify-between gap-4 text-xs leading-5 text-ink/55">
+        <span>Less influence</span>
+        <span>More influence</span>
       </div>
     </div>
   );

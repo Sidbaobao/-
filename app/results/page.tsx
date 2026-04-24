@@ -61,11 +61,14 @@ export default function ResultsPage() {
     <>
       <PageHeader
         eyebrow="Step 3"
-        title="Results dashboard"
-        description="This page shows how your answers and weights combine into a transparent score comparison."
+        title="Results"
+        description="Review the current direction, the main drivers, and the areas that still deserve more attention."
       />
 
-      <SectionCard title="Score summary" description="These are the weighted totals after normalization.">
+      <SectionCard
+        title="Overall direction"
+        description="These totals combine your answers with the priorities you set on the weights page."
+      >
         <ScoreSummary
           stayUsScore={scoringResult.weightedTotals.stay_us}
           returnChinaScore={scoringResult.weightedTotals.return_china}
@@ -77,14 +80,22 @@ export default function ResultsPage() {
       </SectionCard>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <SectionCard title="Total comparison" description="A simple chart wrapper for the overall result.">
+        <SectionCard
+          title="Total score comparison"
+          description="A side-by-side view of the two weighted totals."
+          variant="data"
+        >
           <TotalScoreChart
             stayUsScore={scoringResult.weightedTotals.stay_us}
             returnChinaScore={scoringResult.weightedTotals.return_china}
           />
         </SectionCard>
 
-        <SectionCard title="Dimension comparison" description="This makes it easier to spot where the paths differ.">
+        <SectionCard
+          title="Decision drivers"
+          description="The dimensions contributing most to the current result."
+          variant="data"
+        >
           <DimensionChart contributions={scoringResult.contributions} />
         </SectionCard>
       </div>
@@ -92,18 +103,16 @@ export default function ResultsPage() {
       <SectionCard
         title="Shape comparison"
         description="How the two paths compare across all six dimensions."
+        variant="data"
       >
         <RadarChart scores={scoringResult.normalizedByDimension} />
       </SectionCard>
 
-      <SectionCard title="Dimension score table" description="A simple table for transparent score review.">
-        <DimensionScoreTable scores={scoringResult.normalizedByDimension} />
-      </SectionCard>
-
       <div className="grid gap-6 lg:grid-cols-2">
         <SectionCard
-          title="What Is Driving the Result"
-          description="These dimensions are currently creating the largest weighted separation between the two paths."
+          title="What is driving the result"
+          description="These dimensions create the clearest separation after your weights are applied."
+          variant="subtle"
         >
           <div className="space-y-3">
             {topContributors.length > 0 ? (
@@ -111,7 +120,7 @@ export default function ResultsPage() {
                 const dimension = dimensions.find((item) => item.id === contribution.dimensionId);
 
                 return (
-                  <div key={contribution.dimensionId} className="rounded-[1rem] bg-mist p-4">
+                  <div key={contribution.dimensionId} className="rounded-xl bg-white p-4">
                     <p className="font-medium text-ink">{dimension?.label ?? contribution.dimensionId}</p>
                     <p className="mt-1 text-sm leading-6 text-ink/75">
                       This dimension currently leans toward {recommendedLabel.toLowerCase()} with a weighted gap of{" "}
@@ -129,13 +138,14 @@ export default function ResultsPage() {
         </SectionCard>
 
         <SectionCard
-          title="Which Dimensions Are Still Close"
+          title="Where the picture is still close"
           description="Close dimensions are the ones where your current answers do not strongly separate the two paths."
+          variant="subtle"
         >
           {closeDimensions.length > 0 ? (
             <div className="space-y-3">
               {closeDimensions.map((dimension) => (
-                <div key={dimension?.id} className="rounded-[1rem] bg-mist p-4">
+                <div key={dimension?.id} className="rounded-xl bg-white p-4">
                   <p className="font-medium text-ink">{dimension?.label}</p>
                   <p className="mt-1 text-sm leading-6 text-ink/75">
                     This dimension is currently too close to treat as settled. A change in assumptions here could affect
@@ -155,8 +165,9 @@ export default function ResultsPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         <SectionCard
-          title="Could Changing Weights Flip the Result?"
-          description="This check looks only at dimensions that are currently close and tests how much they could move the outcome."
+          title="Could weights change the result?"
+          description="This check estimates whether the close dimensions have enough room to change the final direction."
+          variant="subtle"
         >
           <div className="space-y-3 text-sm leading-6 text-ink/75">
             <p>
@@ -168,15 +179,16 @@ export default function ResultsPage() {
             </p>
             <p>
               {scoringResult.weightFlipAnalysis.couldFlip
-                ? `Weights could realistically flip this result, especially if the close dimensions end up mattering more to you than they do now.`
-                : `Changing weights alone is less likely to flip this result because the current lead is larger than the estimated movement from close dimensions.`}
+                ? `Yes. If the close dimensions matter more to you than your current weights suggest, the leading path could change.`
+                : `Probably not by weights alone. The current lead is larger than the estimated movement from close dimensions.`}
             </p>
           </div>
         </SectionCard>
 
         <SectionCard
-          title="How To Read This Result"
+          title="How to read this result"
           description="This output is meant to help with structured reflection, not to act like a black-box verdict."
+          variant="subtle"
         >
           <div className="space-y-3 text-sm leading-6 text-ink/75">
             <p>
@@ -194,6 +206,14 @@ export default function ResultsPage() {
           </div>
         </SectionCard>
       </div>
+
+      <SectionCard
+        title="Dimension score table"
+        description="A detailed score view for checking the numbers behind the charts."
+        variant="data"
+      >
+        <DimensionScoreTable scores={scoringResult.normalizedByDimension} />
+      </SectionCard>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Link href="/weights" className="text-sm font-medium text-ink/70 hover:text-ink">

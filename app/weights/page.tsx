@@ -41,13 +41,14 @@ export default function WeightsPage() {
     <>
       <PageHeader
         eyebrow="Step 2"
-        title="Set your weights"
-        description="Weights tell the app which dimensions deserve more influence in the final result. You can treat 1 as lower importance and 5 as higher importance."
+        title="Set your priorities"
+        description="Choose how much each dimension should influence the final result. A higher weight gives that dimension more say in the comparison."
       />
 
       <SectionCard
-        title="How to use weights"
-        description="This step does not change your answers. It only changes how strongly each dimension affects the final score."
+        title="How weights work"
+        description="This step does not change your answers. It changes how strongly each dimension affects the final score."
+        variant="subtle"
       >
         <p className="text-sm leading-6 text-ink/75">
           Example: if family is a major priority for you right now, give it a higher weight than lifestyle.
@@ -67,11 +68,13 @@ export default function WeightsPage() {
         ))}
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Link href="/questionnaire" className="text-sm font-medium text-ink/70 hover:text-ink">
           Back to questionnaire
         </Link>
-        <PrimaryButton onClick={handleSave}>Save and continue to results</PrimaryButton>
+        <PrimaryButton onClick={handleSave} className="w-full sm:w-auto">
+          Save and continue to results
+        </PrimaryButton>
       </div>
     </>
   );
