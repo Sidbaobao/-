@@ -7,10 +7,19 @@
 }
 
 body {
-  @apply bg-sand text-ink antialiased;
+  @apply bg-sand font-sans text-ink antialiased;
   background-image:
     radial-gradient(circle at top left, rgba(76, 111, 255, 0.12), transparent 24rem),
     radial-gradient(circle at bottom right, rgba(15, 139, 141, 0.12), transparent 22rem);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-serif;
 }
 
 a {

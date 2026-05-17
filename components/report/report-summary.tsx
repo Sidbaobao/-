@@ -21,7 +21,7 @@ export function ReportSummary({ report }: ReportSummaryProps) {
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-ink/10 bg-white p-5 sm:p-6">
-          <h3 className="text-lg font-semibold text-ink">Main Supporting Factors</h3>
+          <h3 className="text-xl font-semibold leading-tight text-ink">Main Supporting Factors</h3>
           <ul className="mt-3 space-y-2 text-sm leading-6 text-ink/75">
             {report.supportingFactors.map((item) => (
               <li key={item}>{item}</li>
@@ -30,7 +30,7 @@ export function ReportSummary({ report }: ReportSummaryProps) {
         </div>
 
         <div className="rounded-xl border border-orange-200 bg-orange-50/70 p-5 sm:p-6">
-          <h3 className="text-lg font-semibold text-ink">Why Not the Other Path</h3>
+          <h3 className="text-xl font-semibold leading-tight text-ink">Why Not the Other Path</h3>
           <ul className="mt-3 space-y-2 text-sm leading-6 text-ink/75">
             {report.whyNotOtherPath.map((item) => (
               <li key={item}>{item}</li>
@@ -41,7 +41,7 @@ export function ReportSummary({ report }: ReportSummaryProps) {
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="rounded-xl border border-ink/10 bg-white p-5 sm:p-6">
-          <h3 className="text-lg font-semibold text-ink">Main Risks and Tradeoffs</h3>
+          <h3 className="text-xl font-semibold leading-tight text-ink">Main Risks and Tradeoffs</h3>
           <ul className="mt-3 space-y-2 text-sm leading-6 text-ink/75">
             {report.tradeoffs.map((item) => (
               <li key={item}>{item}</li>
@@ -50,7 +50,7 @@ export function ReportSummary({ report }: ReportSummaryProps) {
         </div>
 
         <div className="rounded-xl border border-ink/10 bg-white p-5 sm:p-6">
-          <h3 className="text-lg font-semibold text-ink">Suggested Next Steps</h3>
+          <h3 className="text-xl font-semibold leading-tight text-ink">Suggested Next Steps</h3>
           <ul className="mt-3 space-y-2 text-sm leading-6 text-ink/75">
             {report.nextSteps.map((item) => (
               <li key={item}>{item}</li>

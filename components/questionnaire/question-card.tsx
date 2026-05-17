@@ -10,7 +10,7 @@ export function QuestionCard({ question, value, onChange }: QuestionCardProps) {
   return (
     <div className="rounded-xl border border-ink/10 bg-white p-5">
       <div className="space-y-2">
-        <h3 className="text-base font-semibold leading-7 text-ink sm:text-lg">{question.prompt}</h3>
+        <h3 className="text-lg font-semibold leading-tight text-ink sm:text-xl">{question.prompt}</h3>
         {question.helpText ? <p className="text-sm leading-6 text-ink/65">{question.helpText}</p> : null}
       </div>
 
