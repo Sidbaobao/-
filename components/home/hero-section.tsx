@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { DecisionMapCanvas } from "@/components/home/decision-map-canvas";
+import { HomeProgressCta } from "@/components/home/home-progress-cta";
 
 export function HeroSection() {
   return (
@@ -20,12 +21,7 @@ export function HeroSection() {
         </p>
 
         <div className="mt-8 flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row">
-          <Link
-            href="/questionnaire"
-            className="inline-flex min-h-11 max-w-full items-center justify-center rounded-xl bg-[#4F86F7] px-5 py-3 text-center text-sm font-semibold leading-5 text-white hover:bg-[#3f75de]"
-          >
-            Start questionnaire
-          </Link>
+          <HomeProgressCta />
           <Link
             href="#how-it-works"
             className="inline-flex min-h-11 max-w-full items-center justify-center rounded-xl px-5 py-3 text-center text-sm font-semibold leading-5 text-white/72 hover:text-white"

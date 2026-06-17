@@ -1,6 +1,6 @@
 import { HeroSection } from "@/components/home/hero-section";
+import { HomeProgressCta } from "@/components/home/home-progress-cta";
 import { TwoPathsVideoSection } from "@/components/home/two-paths-video-section";
-import Link from "next/link";
 
 type StepSectionProps = {
   step: string;
@@ -138,12 +138,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <Link
-              href="/questionnaire"
-              className="inline-flex min-h-11 max-w-full items-center justify-center rounded-xl bg-[#4F86F7] px-5 py-3 text-center text-sm font-semibold leading-5 text-white hover:bg-[#3f75de]"
-            >
-              Start questionnaire
-            </Link>
+            <HomeProgressCta align="end" />
           </div>
         </div>
       </section>

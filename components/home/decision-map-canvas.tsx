@@ -3,30 +3,59 @@
 import { useEffect, useRef } from "react";
 
 type Dot = {
+  baseX: number;
+  baseY: number;
   x: number;
   y: number;
+  velocityX: number;
+  velocityY: number;
   radius: number;
-  phase: number;
-  drift: number;
   color: string;
-  opacity: number;
   glow: number;
-  pushX: number;
-  pushY: number;
+  phase: number;
+  driftRange: number;
+  driftSpeed: number;
+  responsiveness: number;
+  textOpacity: number;
 };
 
 type PointerState = {
   x: number;
   y: number;
+  movementX: number;
+  movementY: number;
   active: boolean;
 };
 
+type RippleWake = {
+  x: number;
+  y: number;
+  movementX: number;
+  movementY: number;
+  age: number;
+  strength: number;
+};
+
 const HERO_BLUE = "#3C5CCF";
-const HERO_ORANGE = "#D72638";
+const HERO_RED = "#D72638";
 const HERO_BACKGROUND = "#070d18";
-const CELL_SIZE = 96;
-const POINTER_RADIUS = 170;
-const FRAME_INTERVAL = 33;
+const CELL_SIZE = 120;
+const DESKTOP_DOT_CAP = 9800;
+const MOBILE_DOT_CAP = 3400;
+const FRAME_INTERVAL = 1000 / 50;
+const POINTER_RADIUS = 220;
+const RIPPLE_RING_WIDTH = 92;
+const MAX_RIPPLE_WAKES = 6;
+const GLOW_THRESHOLD = 0.86;
+
+function clamp(value: number, min: number, max: number) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function smoothstep(edgeStart: number, edgeEnd: number, value: number) {
+  const progress = clamp((value - edgeStart) / (edgeEnd - edgeStart), 0, 1);
+  return progress * progress * (3 - 2 * progress);
+}
 
 function hexToRgb(hex: string) {
   const value = hex.replace("#", "");
@@ -48,37 +77,67 @@ function getDotCount(width: number, height: number) {
   const area = width * height;
 
   if (width < 640) {
-    return Math.min(4200, Math.max(3200, Math.floor(area / 96)));
+    return Math.min(MOBILE_DOT_CAP, Math.max(3000, Math.floor(area / 88)));
   }
 
-  return Math.min(11000, Math.max(9500, Math.floor(area / 132)));
+  return Math.min(DESKTOP_DOT_CAP, Math.max(9000, Math.floor(area / 125)));
 }
 
 function getClusterColor(x: number, y: number, width: number, height: number) {
   const region =
-    Math.sin((x / width) * Math.PI * 3.2 + (y / height) * Math.PI * 0.8) +
-    Math.cos((y / height) * Math.PI * 3.5);
+    Math.sin((x / width) * Math.PI * 3.15 + (y / height) * Math.PI * 0.9) +
+    Math.cos((y / height) * Math.PI * 3.45) +
+    Math.sin(((x - y) / Math.max(width, height)) * Math.PI * 2.4);
 
-  return region > 0.22 ? HERO_ORANGE : HERO_BLUE;
+  return region > 0.2 ? HERO_RED : HERO_BLUE;
+}
+
+function getTextAreaOpacity(x: number, y: number, width: number, height: number) {
+  const centerX = width / 2;
+  const centerY = height * 0.48;
+  const radiusX = width < 640 ? width * 0.42 : Math.min(width * 0.3, 450);
+  const radiusY = width < 640 ? height * 0.23 : Math.min(height * 0.24, 240);
+  const normalizedX = (x - centerX) / radiusX;
+  const normalizedY = (y - centerY) / radiusY;
+  const normalizedDistance = Math.hypot(normalizedX, normalizedY);
+  const textAreaCalm = 1 - smoothstep(0.62, 1.16, normalizedDistance);
+
+  return 1 - textAreaCalm * 0.48;
+}
+
+function createDotPosition(width: number, height: number) {
+  const x = Math.random() * width;
+  const y = Math.random() * height;
+
+  return {
+    x,
+    y,
+    textOpacity: getTextAreaOpacity(x, y, width, height)
+  };
 }
 
 function createDots(width: number, height: number): Dot[] {
   return Array.from({ length: getDotCount(width, height) }, () => {
-    const x = Math.random() * width;
-    const y = Math.random() * height;
+    const { x, y, textOpacity } = createDotPosition(width, height);
     const brightness = Math.random();
+    const isLargeParticle = brightness > 0.82;
+    const radius = isLargeParticle ? Math.random() * 2.5 + 2.8 : Math.random() * 1.55 + 1.55;
 
     return {
+      baseX: x,
+      baseY: y,
       x,
       y,
-      radius: brightness > 0.84 ? Math.random() * 1.5 + 1 : Math.random() * 0.85 + 0.55,
-      phase: Math.random() * Math.PI * 2,
-      drift: Math.random() * 0.45 + 0.12,
+      velocityX: 0,
+      velocityY: 0,
+      radius,
       color: getClusterColor(x, y, width, height),
-      opacity: 0.2 + brightness * 0.62,
       glow: brightness,
-      pushX: 0,
-      pushY: 0
+      phase: Math.random() * Math.PI * 2,
+      driftRange: Math.random() * 18 + 12,
+      driftSpeed: Math.random() * 0.42 + 0.28,
+      responsiveness: Math.random() * 0.55 + 0.65,
+      textOpacity
     };
   });
 }
@@ -87,7 +146,7 @@ function buildGrid(dots: Dot[]) {
   const grid = new Map<string, number[]>();
 
   dots.forEach((dot, index) => {
-    const key = `${Math.floor(dot.x / CELL_SIZE)}:${Math.floor(dot.y / CELL_SIZE)}`;
+    const key = `${Math.floor(dot.baseX / CELL_SIZE)}:${Math.floor(dot.baseY / CELL_SIZE)}`;
     const bucket = grid.get(key);
 
     if (bucket) {
@@ -100,16 +159,16 @@ function buildGrid(dots: Dot[]) {
   return grid;
 }
 
-function getNearbyDotIndices(grid: Map<string, number[]>, pointer: PointerState) {
+function getNearbyDotIndices(grid: Map<string, number[]>, x: number, y: number, radius: number) {
   const indices: number[] = [];
-  const minX = Math.floor((pointer.x - POINTER_RADIUS) / CELL_SIZE);
-  const maxX = Math.floor((pointer.x + POINTER_RADIUS) / CELL_SIZE);
-  const minY = Math.floor((pointer.y - POINTER_RADIUS) / CELL_SIZE);
-  const maxY = Math.floor((pointer.y + POINTER_RADIUS) / CELL_SIZE);
+  const minX = Math.floor((x - radius) / CELL_SIZE);
+  const maxX = Math.floor((x + radius) / CELL_SIZE);
+  const minY = Math.floor((y - radius) / CELL_SIZE);
+  const maxY = Math.floor((y + radius) / CELL_SIZE);
 
-  for (let x = minX; x <= maxX; x += 1) {
-    for (let y = minY; y <= maxY; y += 1) {
-      const bucket = grid.get(`${x}:${y}`);
+  for (let gridX = minX; gridX <= maxX; gridX += 1) {
+    for (let gridY = minY; gridY <= maxY; gridY += 1) {
+      const bucket = grid.get(`${gridX}:${gridY}`);
 
       if (bucket) {
         indices.push(...bucket);
@@ -120,13 +179,36 @@ function getNearbyDotIndices(grid: Map<string, number[]>, pointer: PointerState)
   return indices;
 }
 
+function getFlowTarget(dot: Dot, time: number, reducedMotion: boolean) {
+  if (reducedMotion) {
+    return { x: dot.baseX, y: dot.baseY };
+  }
+
+  const flowTime = time * 0.001 * dot.driftSpeed;
+  const currentX =
+    Math.sin(dot.baseY * 0.006 + flowTime + dot.phase) +
+    Math.cos((dot.baseX + dot.baseY) * 0.0034 - flowTime * 1.28);
+  const currentY =
+    Math.cos(dot.baseX * 0.005 + flowTime * 1.15 + dot.phase) +
+    Math.sin((dot.baseY - dot.baseX) * 0.003 + flowTime * 0.92);
+
+  return {
+    x: dot.baseX + currentX * dot.driftRange,
+    y: dot.baseY + currentY * dot.driftRange * 0.86
+  };
+}
+
+function canUseCursorInteraction(canvas: HTMLCanvasElement, finePointerQuery: MediaQueryList) {
+  return finePointerQuery.matches && canvas.clientWidth >= 640;
+}
+
 export function DecisionMapCanvas() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const dotsRef = useRef<Dot[]>([]);
   const gridRef = useRef<Map<string, number[]>>(new Map());
-  const activePushIndicesRef = useRef<Set<number>>(new Set());
-  const pointerRef = useRef<PointerState>({ x: 0, y: 0, active: false });
+  const rippleWakesRef = useRef<RippleWake[]>([]);
+  const pointerRef = useRef<PointerState>({ x: 0, y: 0, movementX: 0, movementY: 0, active: false });
   const reducedMotionRef = useRef(false);
   const lastFrameTimeRef = useRef(0);
 
@@ -147,132 +229,253 @@ export function DecisionMapCanvas() {
     const finePointerQuery = window.matchMedia("(pointer: fine)");
     reducedMotionRef.current = motionQuery.matches;
 
-    const updatePointerPush = () => {
-      if (reducedMotionRef.current || !pointerRef.current.active || !finePointerQuery.matches) {
-        activePushIndicesRef.current.forEach((index) => {
-          const dot = dotsRef.current[index];
+    const resetCursorState = () => {
+      pointerRef.current.active = false;
+      pointerRef.current.movementX = 0;
+      pointerRef.current.movementY = 0;
+      rippleWakesRef.current = [];
+    };
 
-          if (!dot) {
-            return;
-          }
-
-          dot.pushX *= 0.86;
-          dot.pushY *= 0.86;
-
-          if (Math.abs(dot.pushX) + Math.abs(dot.pushY) < 0.08) {
-            dot.pushX = 0;
-            dot.pushY = 0;
-            activePushIndicesRef.current.delete(index);
-          }
-        });
-
+    const applyCursorForces = (frameScale: number) => {
+      if (
+        reducedMotionRef.current ||
+        !pointerRef.current.active ||
+        !canUseCursorInteraction(canvas, finePointerQuery)
+      ) {
         return;
       }
 
-      const nearbyIndices = getNearbyDotIndices(gridRef.current, pointerRef.current);
-      const nearbySet = new Set(nearbyIndices);
+      const nearbyIndices = getNearbyDotIndices(gridRef.current, pointerRef.current.x, pointerRef.current.y, POINTER_RADIUS + 48);
+      const pointerDistance = Math.hypot(pointerRef.current.movementX, pointerRef.current.movementY);
+      const pointerSpeed = Math.min(pointerDistance, 64);
+      const movementX = pointerDistance > 0 ? pointerRef.current.movementX / pointerDistance : 0;
+      const movementY = pointerDistance > 0 ? pointerRef.current.movementY / pointerDistance : 0;
+
+      if (pointerDistance > 2.5) {
+        rippleWakesRef.current = [
+          {
+            x: pointerRef.current.x,
+            y: pointerRef.current.y,
+            movementX,
+            movementY,
+            age: 0,
+            strength: clamp(pointerSpeed / 44, 0.42, 1)
+          },
+          ...rippleWakesRef.current
+        ].slice(0, MAX_RIPPLE_WAKES);
+      }
 
       nearbyIndices.forEach((index) => {
         const dot = dotsRef.current[index];
-
-        if (!dot) {
-          return;
-        }
-
         const dx = dot.x - pointerRef.current.x;
         const dy = dot.y - pointerRef.current.y;
         const distanceSquared = dx * dx + dy * dy;
         const radiusSquared = POINTER_RADIUS * POINTER_RADIUS;
 
-        if (distanceSquared > radiusSquared || distanceSquared === 0) {
+        if (distanceSquared === 0 || distanceSquared > radiusSquared) {
           return;
         }
 
         const distance = Math.sqrt(distanceSquared);
-        const strength = (1 - distance / POINTER_RADIUS) * 38;
-        const targetX = (dx / distance) * strength;
-        const targetY = (dy / distance) * strength;
+        const proximity = 1 - distance / POINTER_RADIUS;
+        const eased = proximity * proximity * (3 - 2 * proximity);
+        const push = eased * dot.responsiveness * 8.6 * frameScale;
+        const wake = proximity * pointerSpeed * dot.responsiveness * 0.22 * frameScale;
+        const normalX = dx / distance;
+        const normalY = dy / distance;
 
-        dot.pushX += (targetX - dot.pushX) * 0.16;
-        dot.pushY += (targetY - dot.pushY) * 0.16;
-        activePushIndicesRef.current.add(index);
+        dot.velocityX += normalX * push + movementX * wake;
+        dot.velocityY += normalY * push + movementY * wake;
       });
 
-      activePushIndicesRef.current.forEach((index) => {
-        if (nearbySet.has(index)) {
+      pointerRef.current.movementX = 0;
+      pointerRef.current.movementY = 0;
+    };
+
+    const applyRippleWakes = (frameScale: number) => {
+      if (
+        reducedMotionRef.current ||
+        !canUseCursorInteraction(canvas, finePointerQuery) ||
+        rippleWakesRef.current.length === 0
+      ) {
+        return;
+      }
+
+      const activeWakes: RippleWake[] = [];
+
+      rippleWakesRef.current.forEach((wake) => {
+        const nextAge = wake.age + 0.038 * frameScale;
+
+        if (nextAge >= 1) {
           return;
         }
 
-        const dot = dotsRef.current[index];
+        const radius = 28 + nextAge * 360;
+        const nearbyIndices = getNearbyDotIndices(gridRef.current, wake.x, wake.y, radius + RIPPLE_RING_WIDTH);
 
-        if (!dot) {
-          return;
-        }
+        wake.age = nextAge;
+        activeWakes.push(wake);
 
-        dot.pushX *= 0.9;
-        dot.pushY *= 0.9;
+        nearbyIndices.forEach((index) => {
+          const dot = dotsRef.current[index];
+          const dx = dot.x - wake.x;
+          const dy = dot.y - wake.y;
+          const distance = Math.hypot(dx, dy);
+          const ringDistance = Math.abs(distance - radius);
 
-        if (Math.abs(dot.pushX) + Math.abs(dot.pushY) < 0.08) {
-          dot.pushX = 0;
-          dot.pushY = 0;
-          activePushIndicesRef.current.delete(index);
-        }
+          if (distance === 0 || ringDistance > RIPPLE_RING_WIDTH) {
+            return;
+          }
+
+          const ringPower =
+            (1 - ringDistance / RIPPLE_RING_WIDTH) *
+            (1 - nextAge) *
+            wake.strength *
+            dot.responsiveness *
+            frameScale;
+          const normalX = dx / distance;
+          const normalY = dy / distance;
+
+          dot.velocityX += (normalX * 3.4 + wake.movementX * 1.35) * ringPower;
+          dot.velocityY += (normalY * 3.4 + wake.movementY * 1.35) * ringPower;
+        });
+      });
+
+      rippleWakesRef.current = activeWakes;
+    };
+
+    const updateDots = (time: number, frameScale: number) => {
+      if (!reducedMotionRef.current) {
+        applyCursorForces(frameScale);
+        applyRippleWakes(frameScale);
+      }
+
+      const spring = 0.024 * frameScale;
+      const damping = Math.pow(0.89, frameScale);
+
+      dotsRef.current.forEach((dot) => {
+        const target = getFlowTarget(dot, time, reducedMotionRef.current);
+
+        dot.velocityX += (target.x - dot.x) * spring * dot.responsiveness;
+        dot.velocityY += (target.y - dot.y) * spring * dot.responsiveness;
+        dot.velocityX *= damping;
+        dot.velocityY *= damping;
+        dot.x += dot.velocityX * frameScale;
+        dot.y += dot.velocityY * frameScale;
       });
     };
 
-    const draw = (time = 0) => {
+    const drawDots = () => {
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
+      const bluePath = new Path2D();
+      const redPath = new Path2D();
+      const blueSoftPath = new Path2D();
+      const redSoftPath = new Path2D();
+      const blueCalmPath = new Path2D();
+      const redCalmPath = new Path2D();
+      const blueGlowPath = new Path2D();
+      const redGlowPath = new Path2D();
 
       context.globalCompositeOperation = "source-over";
       context.clearRect(0, 0, width, height);
       context.fillStyle = HERO_BACKGROUND;
       context.fillRect(0, 0, width, height);
 
-      updatePointerPush();
-
-      context.globalCompositeOperation = "lighter";
-
       dotsRef.current.forEach((dot) => {
-        const flowTime = time * 0.00022;
-        const flowX =
-          reducedMotionRef.current
-            ? 0
-            : (Math.sin(dot.y * 0.006 + flowTime + dot.phase) +
-                Math.cos((dot.x + dot.y) * 0.0035 + flowTime * 1.4)) *
-              dot.drift *
-              19;
-        const flowY =
-          reducedMotionRef.current
-            ? 0
-            : (Math.cos(dot.x * 0.005 + flowTime * 1.2 + dot.phase) +
-                Math.sin((dot.y - dot.x) * 0.003 + flowTime)) *
-              dot.drift *
-              16;
-        const shimmer = reducedMotionRef.current
-          ? 1
-          : 0.78 + Math.sin(time * 0.00055 + dot.phase) * 0.16 + Math.cos(dot.x * 0.01 + time * 0.00028) * 0.06;
-        const opacity = Math.max(0.12, Math.min(0.92, dot.opacity * shimmer));
-        const x = dot.x + flowX + dot.pushX;
-        const y = dot.y + flowY + dot.pushY;
+        const path =
+          dot.color === HERO_BLUE
+            ? dot.textOpacity < 0.68
+              ? blueCalmPath
+              : dot.textOpacity < 0.9
+                ? blueSoftPath
+                : bluePath
+            : dot.textOpacity < 0.68
+              ? redCalmPath
+              : dot.textOpacity < 0.9
+                ? redSoftPath
+                : redPath;
+        const radius = dot.radius;
 
-        if (dot.glow > 0.72) {
-          context.beginPath();
-          context.fillStyle = rgba(dot.color, (0.035 + dot.glow * 0.045) * shimmer);
-          context.arc(x, y, dot.radius * 5.2, 0, Math.PI * 2);
-          context.fill();
+        path.moveTo(dot.x + radius, dot.y);
+        path.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
+
+        const motionEnergy = Math.abs(dot.velocityX) + Math.abs(dot.velocityY);
+        const shouldGlow =
+          dot.textOpacity > 0.78 && (dot.glow > GLOW_THRESHOLD || (motionEnergy > 2.4 && dot.glow > 0.58));
+
+        if (shouldGlow) {
+          const glowPath = dot.color === HERO_BLUE ? blueGlowPath : redGlowPath;
+          const glowRadius = radius * (1.8 + dot.glow * 0.7);
+
+          glowPath.moveTo(dot.x + glowRadius, dot.y);
+          glowPath.arc(dot.x, dot.y, glowRadius, 0, Math.PI * 2);
         }
-
-        context.beginPath();
-        context.fillStyle = rgba(dot.color, opacity);
-        context.arc(x, y, dot.radius, 0, Math.PI * 2);
-        context.fill();
       });
 
+      context.globalCompositeOperation = "lighter";
+      context.fillStyle = rgba(HERO_BLUE, 0.58);
+      context.fill(bluePath);
+      context.fillStyle = rgba(HERO_BLUE, 0.38);
+      context.fill(blueSoftPath);
+      context.fillStyle = rgba(HERO_BLUE, 0.22);
+      context.fill(blueCalmPath);
+      context.fillStyle = rgba(HERO_RED, 0.56);
+      context.fill(redPath);
+      context.fillStyle = rgba(HERO_RED, 0.36);
+      context.fill(redSoftPath);
+      context.fillStyle = rgba(HERO_RED, 0.2);
+      context.fill(redCalmPath);
+
+      context.shadowBlur = 12;
+      context.shadowColor = rgba(HERO_BLUE, 0.48);
+      context.fillStyle = rgba(HERO_BLUE, 0.2);
+      context.fill(blueGlowPath);
+      context.shadowColor = rgba(HERO_RED, 0.48);
+      context.fillStyle = rgba(HERO_RED, 0.2);
+      context.fill(redGlowPath);
+      context.shadowBlur = 0;
       context.globalCompositeOperation = "source-over";
     };
 
+    const drawFrame = (time = 0) => {
+      const elapsed = lastFrameTimeRef.current ? time - lastFrameTimeRef.current : FRAME_INTERVAL;
+
+      if (!reducedMotionRef.current && elapsed < FRAME_INTERVAL) {
+        animationFrameRef.current = window.requestAnimationFrame(drawFrame);
+        return;
+      }
+
+      const frameScale = clamp(elapsed / (1000 / 60), 0.7, 2.1);
+      lastFrameTimeRef.current = time;
+
+      updateDots(time, frameScale);
+      drawDots();
+
+      if (!reducedMotionRef.current) {
+        animationFrameRef.current = window.requestAnimationFrame(drawFrame);
+      }
+    };
+
+    const stopAnimation = () => {
+      if (animationFrameRef.current) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    };
+
+    const resetDotsToBase = () => {
+      dotsRef.current.forEach((dot) => {
+        dot.x = dot.baseX;
+        dot.y = dot.baseY;
+        dot.velocityX = 0;
+        dot.velocityY = 0;
+      });
+    };
+
     const resize = () => {
+      stopAnimation();
+
       const rect = canvas.getBoundingClientRect();
       const width = Math.max(rect.width, 1);
       const height = Math.max(rect.height, 1);
@@ -284,45 +487,27 @@ export function DecisionMapCanvas() {
 
       dotsRef.current = createDots(width, height);
       gridRef.current = buildGrid(dotsRef.current);
-      activePushIndicesRef.current.clear();
-      draw();
-    };
-
-    const animate = (time: number) => {
-      if (time - lastFrameTimeRef.current >= FRAME_INTERVAL) {
-        draw(time);
-        lastFrameTimeRef.current = time;
-      }
-
-      animationFrameRef.current = window.requestAnimationFrame(animate);
-    };
-
-    const stopAnimation = () => {
-      if (animationFrameRef.current) {
-        window.cancelAnimationFrame(animationFrameRef.current);
-        animationFrameRef.current = null;
-      }
+      resetCursorState();
+      lastFrameTimeRef.current = 0;
+      drawFrame();
     };
 
     const updateMotionPreference = () => {
       reducedMotionRef.current = motionQuery.matches;
       stopAnimation();
+      resetCursorState();
 
       if (reducedMotionRef.current) {
-        pointerRef.current.active = false;
-        dotsRef.current.forEach((dot) => {
-          dot.pushX = 0;
-          dot.pushY = 0;
-        });
-        activePushIndicesRef.current.clear();
-        draw();
+        resetDotsToBase();
+        drawFrame();
       } else {
-        animationFrameRef.current = window.requestAnimationFrame(animate);
+        lastFrameTimeRef.current = 0;
+        animationFrameRef.current = window.requestAnimationFrame(drawFrame);
       }
     };
 
     const handlePointerMove = (event: PointerEvent) => {
-      if (reducedMotionRef.current || !finePointerQuery.matches) {
+      if (reducedMotionRef.current || !canUseCursorInteraction(canvas, finePointerQuery)) {
         return;
       }
 
@@ -334,19 +519,22 @@ export function DecisionMapCanvas() {
         event.clientY < rect.top ||
         event.clientY > rect.bottom
       ) {
-        pointerRef.current.active = false;
+        resetCursorState();
         return;
       }
 
+      const nextX = event.clientX - rect.left;
+      const nextY = event.clientY - rect.top;
+      const movementX = pointerRef.current.active ? nextX - pointerRef.current.x : 0;
+      const movementY = pointerRef.current.active ? nextY - pointerRef.current.y : 0;
+
       pointerRef.current = {
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top,
+        x: nextX,
+        y: nextY,
+        movementX,
+        movementY,
         active: true
       };
-    };
-
-    const handlePointerLeave = () => {
-      pointerRef.current.active = false;
     };
 
     resize();
@@ -354,15 +542,15 @@ export function DecisionMapCanvas() {
 
     window.addEventListener("resize", resize);
     window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("pointerleave", handlePointerLeave);
-    window.addEventListener("blur", handlePointerLeave);
+    window.addEventListener("pointerleave", resetCursorState);
+    window.addEventListener("blur", resetCursorState);
     motionQuery.addEventListener("change", updateMotionPreference);
 
     return () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerleave", handlePointerLeave);
-      window.removeEventListener("blur", handlePointerLeave);
+      window.removeEventListener("pointerleave", resetCursorState);
+      window.removeEventListener("blur", resetCursorState);
       motionQuery.removeEventListener("change", updateMotionPreference);
       stopAnimation();
     };
