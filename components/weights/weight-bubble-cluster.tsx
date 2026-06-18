@@ -1,0 +1,252 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { hierarchy, pack, type HierarchyCircularNode } from "d3-hierarchy";
+import {
+  Briefcase,
+  HeartHandshake,
+  Scale,
+  Sprout,
+  Stamp,
+  Sun,
+  type LucideIcon
+} from "lucide-react";
+import { Dimension, DimensionId, Weights } from "@/types";
+import { WeightFineTuneSlider } from "@/components/weights/weight-fine-tune-slider";
+import {
+  canDecreaseWeight,
+  canIncreaseWeight,
+  getMaxWeight,
+  getWeightPercentage,
+  setDimensionWeight,
+  stepDimensionWeight
+} from "@/components/weights/weight-bubble-utils";
+
+const PACK_WIDTH = 680;
+const PACK_HEIGHT = 520;
+
+type BubbleDatum = {
+  id?: DimensionId;
+  value?: number;
+  order?: number;
+  children?: BubbleDatum[];
+};
+
+type DimensionVisual = {
+  Icon: LucideIcon;
+  color: string;
+};
+
+const dimensionVisuals: Record<DimensionId, DimensionVisual> = {
+  career: {
+    Icon: Briefcase,
+    color: "#3C5CCF"
+  },
+  salary_cost: {
+    Icon: Scale,
+    color: "#D72638"
+  },
+  immigration: {
+    Icon: Stamp,
+    color: "#4F86F7"
+  },
+  family_emotion: {
+    Icon: HeartHandshake,
+    color: "#D96C4A"
+  },
+  lifestyle: {
+    Icon: Sun,
+    color: "#D89A2B"
+  },
+  long_term: {
+    Icon: Sprout,
+    color: "#5F8E5E"
+  }
+};
+
+function hexToRgb(hexColor: string) {
+  const normalizedColor = hexColor.replace("#", "");
+  const value = Number.parseInt(normalizedColor, 16);
+
+  return {
+    r: (value >> 16) & 255,
+    g: (value >> 8) & 255,
+    b: value & 255
+  };
+}
+
+function getColorWithAlpha(hexColor: string, alpha: number) {
+  const { r, g, b } = hexToRgb(hexColor);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+type WeightBubbleClusterProps = {
+  dimensions: Dimension[];
+  weights: Weights;
+  totalBudget: number;
+  onChange: (weights: Weights) => void;
+};
+
+export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange }: WeightBubbleClusterProps) {
+  const dimensionIds = useMemo(() => dimensions.map((dimension) => dimension.id), [dimensions]);
+  const [activeDimensionId, setActiveDimensionId] = useState<DimensionId>(dimensions[0]?.id ?? "career");
+  const [isSettled, setIsSettled] = useState(false);
+
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => setIsSettled(true));
+    return () => window.cancelAnimationFrame(frameId);
+  }, []);
+
+  const packedBubbles = useMemo<Array<HierarchyCircularNode<BubbleDatum>>>(() => {
+    const data: BubbleDatum = {
+      children: dimensions.map((dimension, index) => ({
+        id: dimension.id,
+        value: weights[dimension.id],
+        order: index
+      }))
+    };
+
+    return pack<BubbleDatum>()
+      .size([PACK_WIDTH, PACK_HEIGHT])
+      .padding(12)(
+        hierarchy(data)
+          .sum((datum) => datum.value ?? 0)
+          .sort((a, b) => (a.data.order ?? 0) - (b.data.order ?? 0))
+      )
+      .leaves()
+      .filter((node: HierarchyCircularNode<BubbleDatum>) => node.data.id);
+  }, [dimensions, weights]);
+
+  const activeDimension = dimensions.find((dimension) => dimension.id === activeDimensionId) ?? dimensions[0];
+  const activeWeight = weights[activeDimension.id];
+  const activePercentage = getWeightPercentage(activeWeight, totalBudget);
+  const maxWeight = getMaxWeight(totalBudget, dimensions.length);
+  const activeCanIncrease = canIncreaseWeight(weights, activeDimension.id, dimensionIds);
+  const activeCanDecrease = canDecreaseWeight(weights, activeDimension.id);
+  const boundaryMessage = !activeCanIncrease
+    ? "Other priorities are already at the minimum, so this one cannot grow further."
+    : !activeCanDecrease
+      ? "This priority is already at the minimum."
+      : "Use plus, minus, or the slider to rebalance your priorities.";
+
+  const handleStepChange = (dimensionId: DimensionId, direction: "increase" | "decrease") => {
+    setActiveDimensionId(dimensionId);
+    onChange(stepDimensionWeight(weights, dimensionId, direction, dimensionIds, totalBudget));
+  };
+
+  const handleFineTuneChange = (dimensionId: DimensionId, value: number) => {
+    setActiveDimensionId(dimensionId);
+    onChange(setDimensionWeight(weights, dimensionId, value, dimensionIds, totalBudget));
+  };
+
+  return (
+    <section className="rounded-[2rem] border border-[#eadfce] bg-[#fffaf2] p-5 shadow-soft sm:p-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-coral">Priority map</p>
+          <h2 className="mt-2 font-serif text-2xl font-semibold leading-tight text-ink sm:text-3xl">
+            Shape your decision priorities
+          </h2>
+        </div>
+        <p className="max-w-md text-sm leading-6 text-ink/70">
+          Increasing one priority reduces the others proportionally.
+        </p>
+      </div>
+
+      <div className="mt-6 rounded-[2rem] border border-white/80 bg-white/70 p-3 shadow-sm">
+        <div className="relative mx-auto aspect-[680/520] w-full max-w-4xl overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-[#fffaf2] via-white to-[#f8efe4]">
+          {packedBubbles.map((node) => {
+            const dimensionId = node.data.id as DimensionId;
+            const dimension = dimensions.find((item) => item.id === dimensionId);
+
+            if (!dimension) {
+              return null;
+            }
+
+            const { Icon, color } = dimensionVisuals[dimensionId];
+            const percentage = getWeightPercentage(weights[dimensionId], totalBudget);
+            const isActive = activeDimensionId === dimensionId;
+            const canIncrease = canIncreaseWeight(weights, dimensionId, dimensionIds);
+            const canDecrease = canDecreaseWeight(weights, dimensionId);
+            const fillAlpha = Math.min(0.16 + percentage / 180, 0.58);
+
+            return (
+              <div
+                key={dimensionId}
+                className={`absolute rounded-full transition-all duration-500 ease-out motion-reduce:transition-none ${
+                  isSettled ? "scale-100 opacity-100" : "scale-95 opacity-0 motion-reduce:opacity-100"
+                }`}
+                style={{
+                  left: `${((node.x - node.r) / PACK_WIDTH) * 100}%`,
+                  top: `${((node.y - node.r) / PACK_HEIGHT) * 100}%`,
+                  width: `${((node.r * 2) / PACK_WIDTH) * 100}%`,
+                  height: `${((node.r * 2) / PACK_HEIGHT) * 100}%`
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setActiveDimensionId(dimensionId)}
+                  aria-pressed={isActive}
+                  aria-label={`${dimension.label}, ${percentage}% priority. Open fine tuning.`}
+                  className={`absolute inset-0 flex flex-col items-center justify-center rounded-full border p-4 text-center transition-all duration-300 motion-reduce:transition-none ${
+                    isActive ? "shadow-soft ring-2 ring-coral/30" : "shadow-sm hover:shadow-soft"
+                  }`}
+                  style={{
+                    backgroundColor: getColorWithAlpha(color, fillAlpha),
+                    borderColor: getColorWithAlpha(color, isActive ? 0.8 : 0.35),
+                    color
+                  }}
+                >
+                  <Icon aria-hidden="true" strokeWidth={1.8} className="h-7 w-7 shrink-0 sm:h-8 sm:w-8" />
+                  <span className="mt-2 max-w-[82%] text-sm font-semibold leading-tight text-ink">
+                    {dimension.shortLabel}
+                  </span>
+                  <span className="mt-1 rounded-full bg-white/75 px-2 py-1 text-xs font-semibold text-ink/70">
+                    {percentage}%
+                  </span>
+                </button>
+
+                <div className="absolute bottom-[8%] left-1/2 z-10 flex -translate-x-1/2 items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleStepChange(dimensionId, "decrease")}
+                    disabled={!canDecrease}
+                    aria-label={`Decrease ${dimension.label} priority`}
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/90 text-sm font-bold text-ink shadow-sm transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    -
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleStepChange(dimensionId, "increase")}
+                    disabled={!canIncrease}
+                    aria-label={`Increase ${dimension.label} priority`}
+                    className="flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/90 text-sm font-bold text-ink shadow-sm transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_1.25fr] lg:items-start">
+        <div className="rounded-[1.5rem] border border-[#eadfce] bg-white/75 p-4 text-sm leading-6 text-ink/70">
+          <span className="font-semibold text-ink">{activeDimension.label}</span> is currently{" "}
+          <span className="font-semibold text-[#3C5CCF]">{activePercentage}%</span> of your priority mix.{" "}
+          {boundaryMessage}
+        </div>
+
+        <WeightFineTuneSlider
+          dimension={activeDimension}
+          value={activeWeight}
+          totalBudget={totalBudget}
+          maxWeight={maxWeight}
+          onChange={handleFineTuneChange}
+        />
+      </div>
+    </section>
+  );
+}

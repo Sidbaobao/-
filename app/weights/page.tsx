@@ -6,27 +6,24 @@ import { useRouter } from "next/navigation";
 import { defaultWeights, dimensions } from "@/data/dimensions";
 import { usePrerequisiteGuard } from "@/lib/guards";
 import { loadAppState, saveWeights } from "@/lib/storage";
-import { DimensionId, Weights } from "@/types";
+import { Weights } from "@/types";
 import { PageHeader } from "@/components/ui/page-header";
 import { SectionCard } from "@/components/ui/section-card";
-import { WeightSlider } from "@/components/weights/weight-slider";
+import { WeightBubbleCluster } from "@/components/weights/weight-bubble-cluster";
+import { getWeightTotal } from "@/components/weights/weight-bubble-utils";
 import { PrimaryButton } from "@/components/ui/primary-button";
 
 export default function WeightsPage() {
   const isReady = usePrerequisiteGuard("answers");
   const router = useRouter();
   const [weights, setWeights] = useState<Weights>(defaultWeights);
+  const [totalBudget, setTotalBudget] = useState(getWeightTotal(defaultWeights, dimensions.map((dimension) => dimension.id)));
 
   useEffect(() => {
-    setWeights(loadAppState().weights);
+    const savedWeights = loadAppState().weights;
+    setWeights(savedWeights);
+    setTotalBudget(getWeightTotal(savedWeights, dimensions.map((dimension) => dimension.id)));
   }, []);
-
-  const handleWeightChange = (dimensionId: DimensionId, value: number) => {
-    setWeights((currentWeights) => ({
-      ...currentWeights,
-      [dimensionId]: value
-    }));
-  };
 
   const handleSave = () => {
     saveWeights(weights);
@@ -51,22 +48,17 @@ export default function WeightsPage() {
         variant="subtle"
       >
         <p className="text-sm leading-6 text-ink/75">
-          Example: if family is a major priority for you right now, give it a higher weight than lifestyle.
+          Make a bubble larger when that area matters more right now. The app saves the same six weight values as before,
+          and scoring still treats them as relative priorities.
         </p>
       </SectionCard>
 
-      <div className="space-y-4">
-        {dimensions.map((dimension) => (
-          <WeightSlider
-            key={dimension.id}
-            dimensionId={dimension.id}
-            label={dimension.label}
-            description={dimension.description}
-            value={weights[dimension.id]}
-            onChange={handleWeightChange}
-          />
-        ))}
-      </div>
+      <WeightBubbleCluster
+        dimensions={dimensions}
+        weights={weights}
+        totalBudget={totalBudget}
+        onChange={setWeights}
+      />
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <Link href="/questionnaire" className="text-sm font-medium text-ink/70 hover:text-ink">
