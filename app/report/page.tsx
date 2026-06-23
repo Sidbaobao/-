@@ -57,7 +57,7 @@ export default function ReportPage() {
         <Link href="/results" className="text-sm font-medium text-ink/70 hover:text-ink">
           Back to results
         </Link>
-        <Link href="/questionnaire" className="text-sm font-medium text-slateBlue hover:text-[#3f5ce0]">
+        <Link href="/questionnaire" className="text-sm font-medium text-slateBlue hover:text-legacy-slate-blue-hover">
           Change answers
         </Link>
       </div>

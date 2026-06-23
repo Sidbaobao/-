@@ -19,6 +19,9 @@
   --color-progress-track: 232 225 213;
   --color-result-confidence-track: 231 221 208;
   --color-result-driver-track: 238 229 217;
+  --color-memo-badge-border: 223 212 196;
+  --color-memo-row-border: 230 222 210;
+  --color-memo-row-border-soft: 238 231 222;
   --color-action-primary: 60 92 207;
   --color-action-primary-hover: 48 76 176;
   --color-path-stay: 60 92 207;
