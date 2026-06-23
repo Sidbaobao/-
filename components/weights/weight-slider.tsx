@@ -12,13 +12,13 @@ export function WeightSlider({ dimensionId, label, description, value, onChange 
   const valueLabel = value <= 2 ? "Lower priority" : value === 3 ? "Balanced priority" : "Higher priority";
 
   return (
-    <div className="rounded-xl border border-ink/10 bg-white p-5">
+    <div className="rounded-control border border-ink/10 bg-surface-strong p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <h3 className="text-lg font-semibold leading-tight text-ink sm:text-xl">{label}</h3>
           <p className="text-sm leading-6 text-ink/65">{description}</p>
         </div>
-        <div className="shrink-0 rounded-xl bg-mist px-3 py-2 text-sm font-semibold text-slateBlue">
+        <div className="shrink-0 rounded-control bg-legacy-mist px-3 py-2 text-sm font-semibold text-legacy-slate-blue">
           {valueLabel}: {value}
         </div>
       </div>

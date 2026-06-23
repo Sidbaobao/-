@@ -14,15 +14,70 @@ const config: Config = {
         serif: ["var(--font-fraunces)", "serif"]
       },
       colors: {
-        ink: "#132238",
-        mist: "#eff4f7",
-        slateBlue: "#4c6fff",
-        teal: "#0f8b8d",
-        sand: "#f8f5ef",
-        coral: "#d96c4a"
+        canvas: "rgb(var(--color-canvas) / <alpha-value>)",
+        surface: "rgb(var(--color-surface) / <alpha-value>)",
+        "surface-selected": "rgb(var(--color-surface-selected) / <alpha-value>)",
+        "surface-raised": "rgb(var(--color-surface-raised) / <alpha-value>)",
+        "surface-warm": "rgb(var(--color-surface-warm) / <alpha-value>)",
+        "surface-strong": "rgb(var(--color-surface-strong) / <alpha-value>)",
+        ink: "rgb(var(--color-ink) / <alpha-value>)",
+        "text-muted": "rgb(var(--color-text-muted) / <alpha-value>)",
+        border: "rgb(var(--color-border) / <alpha-value>)",
+        "border-strong": "rgb(var(--color-border-strong) / <alpha-value>)",
+        "progress-track": "rgb(var(--color-progress-track) / <alpha-value>)",
+        "result-confidence-track": "rgb(var(--color-result-confidence-track) / <alpha-value>)",
+        "result-driver-track": "rgb(var(--color-result-driver-track) / <alpha-value>)",
+        "action-primary": "rgb(var(--color-action-primary) / <alpha-value>)",
+        "action-primary-hover": "rgb(var(--color-action-primary-hover) / <alpha-value>)",
+        "path-stay": "rgb(var(--color-path-stay) / <alpha-value>)",
+        "path-return": "rgb(var(--color-path-return) / <alpha-value>)",
+        "accent-warm": "rgb(var(--color-accent-warm) / <alpha-value>)",
+        hero: "rgb(var(--color-hero) / <alpha-value>)",
+        "hero-raised": "rgb(var(--color-hero-raised) / <alpha-value>)",
+
+        // Legacy names retain their exact rendered values until each page migrates.
+        mist: "rgb(var(--color-legacy-mist) / <alpha-value>)",
+        "legacy-mist": "rgb(var(--color-legacy-mist) / <alpha-value>)",
+        "legacy-home-blue": "rgb(var(--color-legacy-home-blue) / <alpha-value>)",
+        slateBlue: "rgb(var(--color-legacy-slate-blue) / <alpha-value>)",
+        teal: "rgb(var(--color-legacy-teal) / <alpha-value>)",
+        "legacy-slate-blue": "rgb(var(--color-legacy-slate-blue) / <alpha-value>)",
+        "legacy-slate-blue-hover": "rgb(var(--color-legacy-slate-blue-hover) / <alpha-value>)",
+        "legacy-teal": "rgb(var(--color-legacy-teal) / <alpha-value>)",
+        sand: "rgb(var(--color-canvas) / <alpha-value>)",
+        coral: "rgb(var(--color-accent-warm) / <alpha-value>)"
+      },
+      borderRadius: {
+        control: "var(--radius-control)",
+        tile: "var(--radius-tile)",
+        option: "var(--radius-option)",
+        card: "var(--radius-card)",
+        panel: "var(--radius-panel)",
+        feature: "var(--radius-feature)",
+        pill: "var(--radius-pill)"
+      },
+      spacing: {
+        "page-gutter": "var(--space-page-gutter)",
+        card: "var(--space-card)",
+        section: "var(--space-section)",
+        feature: "var(--space-feature)",
+        document: "var(--space-document)"
       },
       boxShadow: {
-        soft: "0 16px 40px rgba(19, 34, 56, 0.08)"
+        soft: "var(--shadow-soft)",
+        "legacy-sm": "var(--shadow-legacy-sm)",
+        subtle: "var(--shadow-subtle)",
+        card: "var(--shadow-card)",
+        feature: "var(--shadow-feature)"
+      },
+      fontSize: {
+        display: ["var(--text-display)", { lineHeight: "var(--leading-display)" }],
+        "page-title": ["var(--text-page-title)", { lineHeight: "var(--leading-page-title)" }],
+        "section-title": ["var(--text-section-title)", { lineHeight: "var(--leading-section-title)" }],
+        "card-title": ["var(--text-card-title)", { lineHeight: "var(--leading-card-title)" }],
+        "body-lg": ["var(--text-body-lg)", { lineHeight: "var(--leading-body-lg)" }],
+        body: ["var(--text-body)", { lineHeight: "var(--leading-body)" }],
+        label: ["var(--text-label)", { lineHeight: "var(--leading-label)" }]
       }
     }
   },

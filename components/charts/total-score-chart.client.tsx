@@ -8,8 +8,8 @@ type TotalScoreChartClientProps = {
   returnChinaScore: number;
 };
 
-const STAY_US_COLOR = "#4F86F7";
-const RETURN_CHINA_COLOR = "#F97316";
+const STAY_US_COLOR = "#3C5CCF";
+const RETURN_CHINA_COLOR = "#D72638";
 
 export default function TotalScoreChartClient({ stayUsScore, returnChinaScore }: TotalScoreChartClientProps) {
   const option: EChartsOption = {
@@ -25,11 +25,11 @@ export default function TotalScoreChartClient({ stayUsScore, returnChinaScore }:
       max: 100,
       splitLine: {
         lineStyle: {
-          color: "#d9e1e7"
+          color: "#EADFCE"
         }
       },
       axisLabel: {
-        color: "#506172",
+        color: "#625D55",
         fontSize: 11
       }
     },

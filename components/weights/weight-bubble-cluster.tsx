@@ -140,10 +140,10 @@ export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange
   };
 
   return (
-    <section className="rounded-[2rem] border border-[#eadfce] bg-[#fffaf2] p-5 shadow-soft sm:p-6">
+    <section className="rounded-feature border border-border bg-surface p-5 shadow-soft sm:p-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-coral">Priority map</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-accent-warm">Priority map</p>
           <h2 className="mt-2 font-serif text-2xl font-semibold leading-tight text-ink sm:text-3xl">
             Shape your decision priorities
           </h2>
@@ -153,8 +153,8 @@ export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange
         </p>
       </div>
 
-      <div className="mt-6 rounded-[2rem] border border-white/80 bg-white/70 p-3 shadow-sm">
-        <div className="relative mx-auto aspect-[680/520] w-full max-w-4xl overflow-hidden rounded-[1.75rem] bg-gradient-to-br from-[#fffaf2] via-white to-[#f8efe4]">
+      <div className="mt-6 rounded-feature border border-surface-strong/80 bg-surface-strong/70 p-3 shadow-legacy-sm">
+        <div className="relative mx-auto aspect-[680/520] w-full max-w-4xl overflow-hidden rounded-panel bg-gradient-to-br from-surface via-surface-strong to-surface-warm">
           {packedBubbles.map((node) => {
             const dimensionId = node.data.id as DimensionId;
             const dimension = dimensions.find((item) => item.id === dimensionId);
@@ -173,7 +173,7 @@ export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange
             return (
               <div
                 key={dimensionId}
-                className={`absolute rounded-full transition-all duration-500 ease-out motion-reduce:transition-none ${
+                className={`absolute rounded-pill transition-all duration-500 ease-out motion-reduce:transition-none ${
                   isSettled ? "scale-100 opacity-100" : "scale-95 opacity-0 motion-reduce:opacity-100"
                 }`}
                 style={{
@@ -188,8 +188,10 @@ export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange
                   onClick={() => setActiveDimensionId(dimensionId)}
                   aria-pressed={isActive}
                   aria-label={`${dimension.label}, ${percentage}% priority. Open fine tuning.`}
-                  className={`absolute inset-0 flex flex-col items-center justify-center rounded-full border p-4 text-center transition-all duration-300 motion-reduce:transition-none ${
-                    isActive ? "shadow-soft ring-2 ring-coral/30" : "shadow-sm hover:shadow-soft"
+                  className={`absolute inset-0 flex flex-col items-center justify-center rounded-pill border p-4 text-center transition-all duration-300 motion-reduce:transition-none ${
+                    isActive
+                      ? "shadow-soft ring-2 ring-accent-warm/30"
+                      : "shadow-legacy-sm hover:shadow-soft"
                   }`}
                   style={{
                     backgroundColor: getColorWithAlpha(color, fillAlpha),
@@ -201,7 +203,7 @@ export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange
                   <span className="mt-2 max-w-[82%] text-sm font-semibold leading-tight text-ink">
                     {dimension.shortLabel}
                   </span>
-                  <span className="mt-1 rounded-full bg-white/75 px-2 py-1 text-xs font-semibold text-ink/70">
+                  <span className="mt-1 rounded-pill bg-surface-strong/75 px-2 py-1 text-xs font-semibold text-ink/70">
                     {percentage}%
                   </span>
                 </button>
@@ -212,7 +214,7 @@ export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange
                     onClick={() => handleStepChange(dimensionId, "decrease")}
                     disabled={!canDecrease}
                     aria-label={`Decrease ${dimension.label} priority`}
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/90 text-sm font-bold text-ink shadow-sm transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
+                    className="flex h-8 w-8 items-center justify-center rounded-pill border border-surface-strong/80 bg-surface-strong/90 text-sm font-bold text-ink shadow-legacy-sm transition hover:bg-surface-strong disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     -
                   </button>
@@ -221,7 +223,7 @@ export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange
                     onClick={() => handleStepChange(dimensionId, "increase")}
                     disabled={!canIncrease}
                     aria-label={`Increase ${dimension.label} priority`}
-                    className="flex h-8 w-8 items-center justify-center rounded-full border border-white/80 bg-white/90 text-sm font-bold text-ink shadow-sm transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
+                    className="flex h-8 w-8 items-center justify-center rounded-pill border border-surface-strong/80 bg-surface-strong/90 text-sm font-bold text-ink shadow-legacy-sm transition hover:bg-surface-strong disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     +
                   </button>
@@ -233,9 +235,9 @@ export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange
       </div>
 
       <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_1.25fr] lg:items-start">
-        <div className="rounded-[1.5rem] border border-[#eadfce] bg-white/75 p-4 text-sm leading-6 text-ink/70">
+        <div className="rounded-card border border-border bg-surface-strong/75 p-4 text-sm leading-6 text-ink/70">
           <span className="font-semibold text-ink">{activeDimension.label}</span> is currently{" "}
-          <span className="font-semibold text-[#3C5CCF]">{activePercentage}%</span> of your priority mix.{" "}
+          <span className="font-semibold text-action-primary">{activePercentage}%</span> of your priority mix.{" "}
           {boundaryMessage}
         </div>
 

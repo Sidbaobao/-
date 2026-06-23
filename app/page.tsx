@@ -18,7 +18,7 @@ function HighlightIcon() {
     <svg
       aria-hidden="true"
       viewBox="0 0 16 16"
-      className="mt-0.5 h-4 w-4 shrink-0 text-[#4F86F7]"
+      className="mt-0.5 h-4 w-4 shrink-0 text-legacy-home-blue"
       fill="none"
     >
       <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" />
@@ -43,8 +43,8 @@ function StepSection({
   return (
     <section className="grid gap-10 py-16 lg:grid-cols-2 lg:items-center lg:gap-16 lg:py-24">
       <div className={`order-1 ${imageOrder}`}>
-        <div className="flex aspect-[4/3] min-h-64 w-full flex-col rounded-2xl border border-white/70 bg-white/70 p-5 shadow-soft sm:p-6">
-          <div className="flex min-h-0 flex-1 items-center justify-center rounded-xl border border-dashed border-ink/15 bg-mist/70 text-center text-sm font-medium text-ink/55">
+        <div className="flex aspect-[4/3] min-h-64 w-full flex-col rounded-tile border border-surface-strong/70 bg-surface-strong/70 p-5 shadow-soft sm:p-6">
+          <div className="flex min-h-0 flex-1 items-center justify-center rounded-control border border-dashed border-ink/15 bg-legacy-mist/70 text-center text-sm font-medium text-ink/55">
             <span>{previewLabel}</span>
           </div>
           <p className="mt-4 text-center text-xs font-medium uppercase tracking-[0.14em] text-ink/45">{guideLabel}</p>
@@ -52,14 +52,14 @@ function StepSection({
       </div>
 
       <div className={`order-2 max-w-none ${textOrder}`}>
-        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-teal">{step}</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-accent-warm">{step}</p>
         <h2 className="mt-3 text-4xl font-semibold leading-tight text-ink sm:text-5xl">{title}</h2>
         <p className="mt-4 text-base leading-7 text-ink/75">{description}</p>
         <p className="mt-3 text-sm leading-6 text-ink/65">{detail}</p>
 
         <div className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
           {highlights.map((highlight) => (
-            <div key={highlight} className="flex items-start gap-3 rounded-xl border border-white/70 bg-white/70 p-4">
+            <div key={highlight} className="flex items-start gap-3 rounded-control border border-surface-strong/70 bg-surface-strong/70 p-4">
               <HighlightIcon />
               <p className="text-sm font-medium leading-6 text-ink/72">{highlight}</p>
             </div>
@@ -77,11 +77,11 @@ export default function HomePage() {
 
       <section
         id="how-it-works"
-        className="relative -mt-16 bg-gradient-to-b from-transparent via-sand to-sand px-4 pb-16 pt-32 sm:px-6 lg:px-8"
+        className="relative -mt-16 bg-gradient-to-b from-transparent via-canvas to-canvas px-4 pb-16 pt-32 sm:px-6 lg:px-8"
       >
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
           <div className="max-w-3xl">
-            <p className="text-sm font-medium uppercase tracking-[0.16em] text-teal">How it works</p>
+            <p className="text-sm font-medium uppercase tracking-[0.16em] text-accent-warm">How it works</p>
             <h1 className="mt-3 text-4xl font-semibold leading-tight text-ink sm:text-5xl">
               A transparent flow for a high-stakes personal decision
             </h1>
@@ -128,9 +128,9 @@ export default function HomePage() {
 
           <TwoPathsVideoSection />
 
-          <div className="grid gap-6 rounded-2xl border border-white/70 bg-white/75 p-6 shadow-soft lg:grid-cols-[1fr_auto] lg:items-center lg:p-8">
+          <div className="grid gap-6 rounded-tile border border-surface-strong/70 bg-surface-strong/75 p-6 shadow-soft lg:grid-cols-[1fr_auto] lg:items-center lg:p-8">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-teal">Methodology note</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-accent-warm">Methodology note</p>
               <h2 className="mt-3 text-2xl font-semibold leading-tight text-ink">Use this as structured reflection.</h2>
               <p className="mt-3 text-sm leading-6 text-ink/70">
                 The tool is not legal, immigration, or financial advice. It helps organize your thinking based on your

@@ -83,8 +83,10 @@ function DimensionProgressRing({
 
   return (
     <div
-      className={`relative shrink-0 rounded-full ${
-        isCurrent ? "bg-[#3C5CCF]/10 p-1 shadow-sm" : "bg-white/70 p-0.5"
+      className={`relative shrink-0 rounded-pill ${
+        isCurrent
+          ? "bg-action-primary/10 p-1 shadow-legacy-sm"
+          : "bg-surface-strong/70 p-0.5"
       }`}
       aria-label={`${answeredCount} of ${totalCount} questions answered`}
     >
@@ -99,8 +101,8 @@ function DimensionProgressRing({
           cx={center}
           cy={center}
           r={radius}
-          fill={isComplete ? "#3C5CCF" : "transparent"}
-          stroke="#E8E1D5"
+          fill={isComplete ? "rgb(var(--color-action-primary))" : "transparent"}
+          stroke="rgb(var(--color-progress-track))"
           strokeWidth={strokeWidth}
         />
         <circle
@@ -108,7 +110,7 @@ function DimensionProgressRing({
           cy={center}
           r={radius}
           fill="transparent"
-          stroke="#3C5CCF"
+          stroke="rgb(var(--color-action-primary))"
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={dashOffset}
@@ -122,7 +124,7 @@ function DimensionProgressRing({
               center + 10
             } ${center - 8}`}
             fill="none"
-            stroke="#FFFFFF"
+            stroke="rgb(var(--color-surface-strong))"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="3"
@@ -150,15 +152,15 @@ function DimensionIntroHeader({ dimension }: DimensionIntroHeaderProps) {
   const { Icon, guidingQuestion } = dimensionIntroById[dimension.id];
 
   return (
-    <div className="rounded-[1.75rem] border border-[#eadfce] bg-[#fffaf2] p-5 shadow-sm sm:p-6">
+    <div className="rounded-panel border border-border bg-surface p-5 shadow-legacy-sm sm:p-6">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-coral/10 text-coral shadow-sm">
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-tile bg-accent-warm/10 text-accent-warm shadow-legacy-sm">
           <Icon aria-hidden="true" strokeWidth={1.8} className="h-7 w-7" />
         </div>
 
         <div className="min-w-0 space-y-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-coral">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-accent-warm">
               Current dimension
             </p>
             <h2 className="mt-2 font-serif text-2xl font-semibold leading-tight text-ink sm:text-3xl">
@@ -168,7 +170,7 @@ function DimensionIntroHeader({ dimension }: DimensionIntroHeaderProps) {
           <p className="max-w-3xl text-sm leading-6 text-ink/70 sm:text-base">
             {dimension.description}
           </p>
-          <p className="max-w-3xl rounded-2xl border border-coral/15 bg-white/70 px-4 py-3 text-sm font-medium leading-6 text-ink">
+          <p className="max-w-3xl rounded-tile border border-accent-warm/15 bg-surface-strong/70 px-4 py-3 text-sm font-medium leading-6 text-ink">
             {guidingQuestion}
           </p>
         </div>
@@ -237,16 +239,16 @@ export default function QuestionnairePage() {
         description="Answer based on your current situation. You can come back and change any response before reviewing results."
       />
 
-      <div className="sticky top-3 z-20 rounded-full border border-[#eadfce] bg-[#fffaf2]/95 px-4 py-3 shadow-sm backdrop-blur">
+      <div className="sticky top-3 z-20 rounded-pill border border-border bg-surface/95 px-4 py-3 shadow-legacy-sm backdrop-blur">
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-xs font-medium text-ink/70">
           <span>
             {completedCount} of {questions.length} answered
           </span>
           <span>{progressPercent}% complete</span>
         </div>
-        <div className="h-2 rounded-full bg-[#3C5CCF]/10">
+        <div className="h-2 rounded-pill bg-action-primary/10">
           <div
-            className="h-2 rounded-full bg-[#3C5CCF] transition-all duration-300"
+            className="h-2 rounded-pill bg-action-primary transition-all duration-300"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -264,9 +266,9 @@ export default function QuestionnairePage() {
           <span className="font-medium text-ink">{progressPercent}% complete</span>
           <span className="text-ink/60">{questions.length - completedCount} remaining</span>
         </div>
-        <div className="h-3 rounded-full bg-mist">
+        <div className="h-3 rounded-pill bg-legacy-mist">
           <div
-            className="h-3 rounded-full bg-slateBlue transition-all"
+            className="h-3 rounded-pill bg-legacy-slate-blue transition-all"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -291,12 +293,12 @@ export default function QuestionnairePage() {
                   key={group.dimension.id}
                   type="button"
                   onClick={() => setCurrentStepIndex(index)}
-                  className={`min-w-64 rounded-2xl border p-4 text-left transition ${
+                  className={`min-w-64 rounded-tile border p-4 text-left transition ${
                     isCurrent
-                      ? "border-coral/50 bg-[#fff3ec] text-ink shadow-sm"
+                      ? "border-accent-warm/50 bg-surface-selected text-ink shadow-legacy-sm"
                       : isComplete
-                        ? "border-[#3C5CCF]/30 bg-white/85 text-ink hover:border-[#3C5CCF]/45"
-                        : "border-ink/10 bg-[#fffdf8] text-ink/65 hover:border-coral/35"
+                        ? "border-action-primary/30 bg-surface-strong/85 text-ink hover:border-action-primary/45"
+                        : "border-ink/10 bg-surface-raised text-ink/65 hover:border-accent-warm/35"
                   }`}
                   aria-current={isCurrent ? "step" : undefined}
                 >
@@ -330,7 +332,7 @@ export default function QuestionnairePage() {
         <SectionCard variant="subtle">
           <DimensionIntroHeader dimension={currentGroup.dimension} />
 
-          <div className="mb-6 mt-6 rounded-2xl border border-[#eadfce] bg-[#fffdf8] p-4 text-sm text-ink/65">
+          <div className="mb-6 mt-6 rounded-tile border border-border bg-surface-raised p-4 text-sm text-ink/65">
             <span className="font-medium text-ink">
               {currentGroupAnsweredCount} of {currentGroup.questions.length}
             </span>{" "}
@@ -350,10 +352,10 @@ export default function QuestionnairePage() {
         </SectionCard>
       ) : null}
 
-      <div className="flex flex-col gap-3 rounded-[1.5rem] border border-ink/10 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 rounded-card border border-ink/10 bg-surface-strong p-4 shadow-legacy-sm sm:flex-row sm:items-center sm:justify-between">
         <Link
           href="/"
-          className="inline-flex min-h-11 items-center justify-center rounded-full px-5 text-sm font-medium text-ink/65 transition hover:bg-mist hover:text-ink sm:justify-start"
+          className="inline-flex min-h-11 items-center justify-center rounded-pill px-5 text-sm font-medium text-ink/65 transition hover:bg-legacy-mist hover:text-ink sm:justify-start"
         >
           Back to home
         </Link>
@@ -363,7 +365,7 @@ export default function QuestionnairePage() {
             <button
               type="button"
               onClick={goToPreviousStep}
-              className="inline-flex min-h-11 items-center justify-center rounded-full border border-ink/10 px-5 text-sm font-medium text-ink transition hover:border-ink/20 hover:bg-mist"
+              className="inline-flex min-h-11 items-center justify-center rounded-pill border border-ink/10 px-5 text-sm font-medium text-ink transition hover:border-ink/20 hover:bg-legacy-mist"
             >
               Previous
             </button>

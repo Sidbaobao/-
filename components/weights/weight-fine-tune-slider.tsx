@@ -19,16 +19,16 @@ export function WeightFineTuneSlider({
   const percentage = getWeightPercentage(value, totalBudget);
 
   return (
-    <div className="rounded-[1.5rem] border border-[#eadfce] bg-[#fffaf2] p-5 shadow-sm">
+    <div className="rounded-card border border-border bg-surface p-5 shadow-legacy-sm">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-coral">Fine tune</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-warm">Fine tune</p>
           <h3 className="mt-2 font-serif text-xl font-semibold leading-tight text-ink">
             {dimension.label}
           </h3>
           <p className="mt-2 text-sm leading-6 text-ink/65">{dimension.description}</p>
         </div>
-        <div className="shrink-0 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#3C5CCF] shadow-sm">
+        <div className="shrink-0 rounded-pill bg-surface-strong px-4 py-2 text-sm font-semibold text-action-primary shadow-legacy-sm">
           {percentage}%
         </div>
       </div>
@@ -41,7 +41,7 @@ export function WeightFineTuneSlider({
         value={value}
         onChange={(event) => onChange(dimension.id, Number(event.target.value))}
         aria-label={`Fine tune ${dimension.label} priority`}
-        className="mt-5 w-full accent-[#3C5CCF]"
+        className="mt-5 w-full accent-action-primary"
       />
 
       <div className="mt-2 flex justify-between gap-4 text-xs leading-5 text-ink/55">

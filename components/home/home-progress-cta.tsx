@@ -19,7 +19,7 @@ type HomeProgressCtaProps = {
 };
 
 const buttonClassName =
-  "inline-flex min-h-11 max-w-full items-center justify-center rounded-xl bg-[#4F86F7] px-5 py-3 text-center text-sm font-semibold leading-5 text-white hover:bg-[#3f75de]";
+  "inline-flex min-h-11 max-w-full items-center justify-center rounded-control bg-action-primary px-5 py-3 text-center text-sm font-semibold leading-5 text-surface-strong hover:bg-action-primary-hover";
 
 export function HomeProgressCta({ align = "center" }: HomeProgressCtaProps) {
   const router = useRouter();

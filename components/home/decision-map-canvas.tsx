@@ -556,5 +556,5 @@ export function DecisionMapCanvas() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 h-full w-full bg-[#070d18]" />;
+  return <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 h-full w-full bg-hero" />;
 }

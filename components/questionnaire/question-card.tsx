@@ -8,7 +8,7 @@ type QuestionCardProps = {
 
 export function QuestionCard({ question, value, onChange }: QuestionCardProps) {
   return (
-    <div className="rounded-[1.5rem] border border-ink/10 bg-white p-5 shadow-sm">
+    <div className="rounded-card border border-ink/10 bg-surface-strong p-5 shadow-legacy-sm">
       <div className="space-y-2">
         <h3 className="text-lg font-semibold leading-tight text-ink sm:text-xl">{question.prompt}</h3>
         {question.helpText ? <p className="text-sm leading-6 text-ink/65">{question.helpText}</p> : null}
@@ -21,10 +21,10 @@ export function QuestionCard({ question, value, onChange }: QuestionCardProps) {
           return (
             <label
               key={option.id}
-              className={`group block cursor-pointer rounded-[1.25rem] border px-5 py-4 transition duration-200 focus-within:ring-2 focus-within:ring-coral/30 focus-within:ring-offset-2 focus-within:ring-offset-sand ${
+              className={`group block cursor-pointer rounded-option border px-5 py-4 transition duration-200 focus-within:ring-2 focus-within:ring-accent-warm/30 focus-within:ring-offset-2 focus-within:ring-offset-canvas ${
                 isSelected
-                  ? "border-coral/70 bg-[#fff3ec] shadow-sm"
-                  : "border-ink/10 bg-[#fffdf8] hover:border-coral/40 hover:bg-white hover:shadow-sm"
+                  ? "border-accent-warm/70 bg-surface-selected shadow-legacy-sm"
+                  : "border-ink/10 bg-surface-raised hover:border-accent-warm/40 hover:bg-surface-strong hover:shadow-legacy-sm"
               }`}
             >
               <input
@@ -37,14 +37,14 @@ export function QuestionCard({ question, value, onChange }: QuestionCardProps) {
               />
               <div className="flex items-start gap-4">
                 <span
-                  className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition ${
+                  className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-pill border transition ${
                     isSelected
-                      ? "border-coral bg-coral text-white"
-                      : "border-ink/20 bg-white group-hover:border-coral/50"
+                      ? "border-accent-warm bg-accent-warm text-surface-strong"
+                      : "border-ink/20 bg-surface-strong group-hover:border-accent-warm/50"
                   }`}
                 >
                   <span
-                    className={`h-2 w-2 rounded-full bg-current transition ${
+                    className={`h-2 w-2 rounded-pill bg-current transition ${
                       isSelected ? "scale-100 opacity-100" : "scale-0 opacity-0"
                     }`}
                   />

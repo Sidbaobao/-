@@ -9,8 +9,8 @@ type RadarChartClientProps = {
   scores: NormalizedDimensionScore[];
 };
 
-const STAY_US_COLOR = "#4F86F7";
-const RETURN_CHINA_COLOR = "#F97316";
+const STAY_US_COLOR = "#3C5CCF";
+const RETURN_CHINA_COLOR = "#D72638";
 
 export default function RadarChartClient({ scores }: RadarChartClientProps) {
   const orderedScores = dimensions.map((dimension) => {
@@ -25,7 +25,7 @@ export default function RadarChartClient({ scores }: RadarChartClientProps) {
     legend: {
       bottom: 0,
       textStyle: {
-        color: "#506172",
+        color: "#625D55",
         fontSize: 11
       }
     },
@@ -42,12 +42,12 @@ export default function RadarChartClient({ scores }: RadarChartClientProps) {
       },
       splitLine: {
         lineStyle: {
-          color: "#d9e1e7"
+          color: "#EADFCE"
         }
       },
       splitArea: {
         areaStyle: {
-          color: ["rgba(255,255,255,0.22)", "rgba(239,244,247,0.45)"]
+          color: ["rgba(255,250,242,0.32)", "rgba(234,223,206,0.28)"]
         }
       }
     },
@@ -60,14 +60,14 @@ export default function RadarChartClient({ scores }: RadarChartClientProps) {
             name: "Stay in the US",
             lineStyle: { color: STAY_US_COLOR, width: 2 },
             itemStyle: { color: STAY_US_COLOR },
-            areaStyle: { color: "rgba(79, 134, 247, 0.12)" }
+            areaStyle: { color: "rgba(60, 92, 207, 0.12)" }
           },
           {
             value: orderedScores.map((score) => score?.return_china ?? 0),
             name: "Return to China",
             lineStyle: { color: RETURN_CHINA_COLOR, width: 2 },
             itemStyle: { color: RETURN_CHINA_COLOR },
-            areaStyle: { color: "rgba(249, 115, 22, 0.10)" }
+            areaStyle: { color: "rgba(215, 38, 56, 0.10)" }
           }
         ]
       }

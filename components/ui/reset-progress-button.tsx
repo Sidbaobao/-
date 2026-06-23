@@ -11,8 +11,8 @@ export function ResetProgressButton({ variant = "default" }: ResetProgressButton
   const router = useRouter();
   const className =
     variant === "light"
-      ? "rounded-xl border border-white/25 px-4 py-2 text-sm font-medium text-white/75 hover:border-white/60 hover:text-white"
-      : "rounded-full border border-ink/15 px-4 py-2 text-sm font-medium text-ink/75 hover:border-slateBlue hover:text-slateBlue";
+      ? "rounded-control border border-surface-strong/25 px-4 py-2 text-sm font-medium text-surface-strong/75 hover:border-surface-strong/60 hover:text-surface-strong"
+      : "rounded-pill border border-ink/15 px-4 py-2 text-sm font-medium text-ink/75 hover:border-legacy-slate-blue hover:text-legacy-slate-blue";
 
   const handleReset = () => {
     resetAppState();

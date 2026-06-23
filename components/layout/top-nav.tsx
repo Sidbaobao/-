@@ -1,59 +1,152 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { Lock } from "lucide-react";
+import { questions } from "@/data/questions";
+import {
+  filterAnswersToCurrent,
+  hasCompleteAnswers,
+  hasWeights,
+  loadAppState
+} from "@/lib/storage";
 import { ResetProgressButton } from "@/components/ui/reset-progress-button";
 
 const navItems = [
-  { href: "/", label: "Home" },
-  { href: "/questionnaire", label: "Questionnaire" },
-  { href: "/weights", label: "Weights" },
-  { href: "/results", label: "Results" },
-  { href: "/report", label: "Report" }
-];
+  { href: "/", label: "Home", requirement: "none" },
+  { href: "/questionnaire", label: "Questionnaire", requirement: "none" },
+  { href: "/weights", label: "Weights", requirement: "answers" },
+  { href: "/results", label: "Results", requirement: "weights" },
+  { href: "/report", label: "Report", requirement: "weights" }
+] as const;
+
+type UnlockState = {
+  answers: boolean;
+  weights: boolean;
+};
+
+type NavLinksProps = {
+  pathname: string;
+  isHome: boolean;
+  unlockState: UnlockState;
+};
+
+const lockedReasons = {
+  answers: "Complete the questionnaire first.",
+  weights: "Set your weights first."
+} as const;
+
+function NavLinks({ pathname, isHome, unlockState }: NavLinksProps) {
+  return navItems.map((item) => {
+    const isActive = pathname === item.href;
+    const isUnlocked =
+      item.requirement === "none" ||
+      (item.requirement === "answers" ? unlockState.answers : unlockState.weights);
+    const baseClassName = "inline-flex items-center gap-1.5 whitespace-nowrap text-sm";
+    const unlockedClassName = isHome
+      ? isActive
+        ? "font-medium text-surface-strong"
+        : "text-surface-strong/70 hover:text-surface-strong"
+      : isActive
+        ? "font-medium text-legacy-slate-blue"
+        : "text-ink/70 hover:text-ink";
+
+    const statusIcon = item.requirement === "none" ? null : (
+      <span className="inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center" aria-hidden="true">
+        <Lock
+          className={`h-3.5 w-3.5 ${isUnlocked ? "invisible" : "visible"}`}
+          strokeWidth={1.8}
+        />
+      </span>
+    );
+
+    if (isUnlocked) {
+      return (
+        <Link
+          key={item.href}
+          href={item.href}
+          aria-current={isActive ? "page" : undefined}
+          className={`${baseClassName} ${unlockedClassName}`}
+        >
+          {statusIcon}
+          {item.label}
+        </Link>
+      );
+    }
+
+    const lockedReason = lockedReasons[item.requirement];
+
+    return (
+      <span
+        key={item.href}
+        role="link"
+        aria-disabled="true"
+        aria-current={isActive ? "page" : undefined}
+        aria-label={`${item.label}. ${lockedReason}`}
+        title={lockedReason}
+        className={`${baseClassName} cursor-not-allowed select-none ${
+          isHome ? "text-surface-strong/35" : "text-ink/35"
+        }`}
+      >
+        {statusIcon}
+        {item.label}
+      </span>
+    );
+  });
+}
 
 export function TopNav() {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const [unlockState, setUnlockState] = useState<UnlockState>({
+    answers: false,
+    weights: false
+  });
+
+  useEffect(() => {
+    const state = loadAppState();
+    const currentAnswers = filterAnswersToCurrent(state.answers, questions);
+    const answersReady = hasCompleteAnswers(
+      { ...state, answers: currentAnswers },
+      questions.length
+    );
+
+    setUnlockState({
+      answers: answersReady,
+      weights: answersReady && hasWeights(state)
+    });
+  }, [pathname]);
 
   return (
     <header
       className={
         isHome
-          ? "absolute left-0 top-0 z-30 w-full border-b border-white/10 bg-transparent"
-          : "border-b border-white/60 bg-white/85 backdrop-blur"
+          ? "absolute left-0 top-0 z-30 w-full border-b border-surface-strong/10 bg-transparent"
+          : "border-b border-surface-strong/60 bg-surface-strong/85 backdrop-blur"
       }
     >
-      <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-        <Link href="/" className={isHome ? "text-lg font-semibold text-white" : "text-lg font-semibold text-ink"}>
-          Stay or Return
-        </Link>
+      <div className="mx-auto w-full max-w-6xl px-4 py-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between gap-4">
+          <Link href="/" className={isHome ? "text-lg font-semibold text-surface-strong" : "text-lg font-semibold text-ink"}>
+            Stay or Return
+          </Link>
 
-        <nav className="hidden items-center gap-5 md:flex">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
+          <nav aria-label="Primary navigation" className="hidden items-center gap-5 md:flex">
+            <NavLinks pathname={pathname} isHome={isHome} unlockState={unlockState} />
+          </nav>
 
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={
-                  isHome
-                    ? isActive
-                      ? "text-sm font-medium text-white"
-                      : "text-sm text-white/70 hover:text-white"
-                    : isActive
-                      ? "text-sm font-medium text-slateBlue"
-                      : "text-sm text-ink/70 hover:text-ink"
-                }
-              >
-                {item.label}
-              </Link>
-            );
-          })}
+          <ResetProgressButton variant={isHome ? "light" : "default"} />
+        </div>
+
+        <nav
+          aria-label="Primary navigation"
+          className={`-mx-1 mt-3 flex items-center gap-4 overflow-x-auto px-1 pb-1 pt-3 md:hidden ${
+            isHome ? "border-t border-surface-strong/10" : "border-t border-ink/10"
+          }`}
+        >
+          <NavLinks pathname={pathname} isHome={isHome} unlockState={unlockState} />
         </nav>
-
-        <ResetProgressButton variant={isHome ? "light" : "default"} />
       </div>
     </header>
   );

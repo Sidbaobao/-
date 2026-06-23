@@ -4,6 +4,98 @@
 
 :root {
   color-scheme: light;
+
+  /* Color primitives and semantic roles */
+  --color-canvas: 248 245 239;
+  --color-surface: 255 250 242;
+  --color-surface-selected: 255 243 236;
+  --color-surface-raised: 255 253 248;
+  --color-surface-warm: 248 239 228;
+  --color-surface-strong: 255 255 255;
+  --color-ink: 19 34 56;
+  --color-text-muted: 98 93 85;
+  --color-border: 234 223 206;
+  --color-border-strong: 220 211 199;
+  --color-progress-track: 232 225 213;
+  --color-result-confidence-track: 231 221 208;
+  --color-result-driver-track: 238 229 217;
+  --color-action-primary: 60 92 207;
+  --color-action-primary-hover: 48 76 176;
+  --color-path-stay: 60 92 207;
+  --color-path-return: 215 38 56;
+  --color-accent-warm: 217 108 74;
+  --color-hero: 7 13 24;
+  --color-hero-raised: 26 34 48;
+
+  /* Exact aliases for the current palette during migration */
+  --color-legacy-mist: 239 244 247;
+  --color-legacy-home-blue: 79 134 247;
+  --color-legacy-slate-blue: 76 111 255;
+  --color-legacy-slate-blue-hover: 63 92 224;
+  --color-legacy-teal: 15 139 141;
+
+  --gradient-hero-vignette: radial-gradient(
+    circle at center,
+    rgba(7, 13, 24, 0.22),
+    rgba(7, 13, 24, 0.64) 45%,
+    rgba(7, 13, 24, 0.94) 100%
+  );
+
+  /* Shape */
+  --radius-control: 0.75rem;
+  --radius-tile: 1rem;
+  --radius-option: 1.25rem;
+  --radius-card: 1.5rem;
+  --radius-panel: 1.75rem;
+  --radius-feature: 2rem;
+  --radius-pill: 9999px;
+
+  /* Layout rhythm */
+  --space-page-gutter: 1rem;
+  --space-card: 1.25rem;
+  --space-section: 2rem;
+  --space-feature: 1.5rem;
+  --space-document: 1.5rem;
+
+  /* Elevation */
+  --shadow-soft: 0 16px 40px rgba(19, 34, 56, 0.08);
+  --shadow-legacy-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-subtle: 0 1px 2px rgba(19, 34, 56, 0.05);
+  --shadow-card: 0 12px 32px rgba(19, 34, 56, 0.07);
+  --shadow-feature: 0 20px 60px rgba(19, 34, 56, 0.1);
+
+  /* Typography */
+  --text-display: 4rem;
+  --leading-display: 0.98;
+  --text-page-title: 3rem;
+  --leading-page-title: 1.02;
+  --text-section-title: 2rem;
+  --leading-section-title: 1.12;
+  --text-card-title: 1.25rem;
+  --leading-card-title: 1.3;
+  --text-body-lg: 1.125rem;
+  --leading-body-lg: 1.65;
+  --text-body: 1rem;
+  --leading-body: 1.6;
+  --text-label: 0.75rem;
+  --leading-label: 1.4;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --space-page-gutter: 1.5rem;
+    --space-card: 1.5rem;
+    --space-feature: 2rem;
+    --space-document: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --space-page-gutter: 2rem;
+    --space-feature: 2.5rem;
+    --space-document: 3.5rem;
+  }
 }
 
 body {
@@ -28,4 +120,41 @@ a {
 
 input[type="range"] {
   accent-color: #4c6fff;
+}
+
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  body:has(.decision-memo) {
+    background: #ffffff !important;
+  }
+
+  body:has(.decision-memo) > div > header,
+  .memo-screen-actions {
+    display: none !important;
+  }
+
+  body:has(.decision-memo) main {
+    display: block !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  .decision-memo {
+    overflow: visible !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .memo-block,
+  .memo-comparison > div,
+  .memo-comparison > p {
+    break-inside: avoid;
+  }
+
 }

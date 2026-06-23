@@ -16,7 +16,7 @@ function VideoPanel({ accentClassName, label, shouldPlayVideo, supportingText, s
 
   return (
     <div>
-      <div className="relative min-h-[34rem] overflow-hidden rounded-2xl bg-[#070d18] shadow-soft sm:min-h-[42rem] lg:min-h-[48rem]">
+      <div className="relative min-h-[34rem] overflow-hidden rounded-tile bg-hero shadow-soft sm:min-h-[42rem] lg:min-h-[48rem]">
         {!hasVideoError ? (
           <video
             aria-hidden="true"
@@ -34,7 +34,7 @@ function VideoPanel({ accentClassName, label, shouldPlayVideo, supportingText, s
       </div>
 
       <div className="pt-5">
-        <div className={`mb-4 h-1 w-16 rounded-full ${accentClassName}`} />
+        <div className={`mb-4 h-1 w-16 rounded-pill ${accentClassName}`} />
         <h3 className="text-3xl font-semibold leading-tight text-ink sm:text-4xl">{label}</h3>
         <p className="mt-2 max-w-md text-sm leading-6 text-ink/68 sm:text-base">{supportingText}</p>
       </div>
@@ -78,7 +78,7 @@ export function TwoPathsVideoSection() {
   return (
     <section ref={sectionRef} className="py-16 lg:py-24" aria-labelledby="two-paths-heading">
       <div className="mx-auto max-w-3xl text-center">
-        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-teal">Two paths</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-accent-warm">Two paths</p>
         <h2 id="two-paths-heading" className="mt-3 text-4xl font-semibold leading-tight text-ink sm:text-5xl">
           Make both futures concrete before you compare them.
         </h2>
@@ -90,14 +90,14 @@ export function TwoPathsVideoSection() {
 
       <div className="mt-10 grid gap-8 lg:grid-cols-2">
         <VideoPanel
-          accentClassName="bg-[#3C5CCF]"
+          accentClassName="bg-path-stay"
           label="Stay in the US"
           shouldPlayVideo={shouldPlayVideo}
           supportingText="Build your life on the US path."
           src="/manhattan.mp4"
         />
         <VideoPanel
-          accentClassName="bg-[#D72638]"
+          accentClassName="bg-path-return"
           label="Return to China"
           shouldPlayVideo={shouldPlayVideo}
           supportingText="Build your life on the China path."
@@ -108,7 +108,7 @@ export function TwoPathsVideoSection() {
       <div className="mt-8 flex justify-center">
         <Link
           href="/questionnaire"
-          className="inline-flex min-h-11 max-w-full items-center justify-center rounded-xl bg-[#4F86F7] px-5 py-3 text-center text-sm font-semibold leading-5 text-white hover:bg-[#3f75de]"
+          className="inline-flex min-h-11 max-w-full items-center justify-center rounded-control bg-action-primary px-5 py-3 text-center text-sm font-semibold leading-5 text-surface-strong hover:bg-action-primary-hover"
         >
           Start questionnaire
         </Link>

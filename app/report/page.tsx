@@ -8,8 +8,6 @@ import { usePrerequisiteGuard } from "@/lib/guards";
 import { scoreDecision } from "@/lib/scoring";
 import { buildRecommendationReport } from "@/lib/report";
 import { AppState } from "@/types";
-import { PageHeader } from "@/components/ui/page-header";
-import { SectionCard } from "@/components/ui/section-card";
 import { ReportSummary } from "@/components/report/report-summary";
 
 export default function ReportPage() {
@@ -37,25 +35,25 @@ export default function ReportPage() {
     return buildRecommendationReport(scoringResult);
   }, [scoringResult]);
 
-  if (!isReady || !report) {
+  if (!isReady || !scoringResult || !report) {
     return null;
   }
 
+  const generatedDate = new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric"
+  }).format(new Date());
+
   return (
     <>
-      <PageHeader
-        eyebrow="Step 4"
-        title="Recommendation memo"
-        description="A compact summary of the current direction, the strongest supporting factors, and the tradeoffs to review before acting."
+      <ReportSummary
+        report={report}
+        scoringResult={scoringResult}
+        generatedDate={generatedDate}
       />
 
-      <ReportSummary report={report} />
-
-      <SectionCard title="Methodology and disclaimer" variant="subtle">
-        <p className="text-sm leading-7 text-ink/75">{report.disclaimer}</p>
-      </SectionCard>
-
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="memo-screen-actions flex flex-wrap items-center justify-between gap-3">
         <Link href="/results" className="text-sm font-medium text-ink/70 hover:text-ink">
           Back to results
         </Link>

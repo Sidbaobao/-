@@ -9,8 +9,8 @@ type DimensionChartClientProps = {
   contributions: DimensionContribution[];
 };
 
-const STAY_US_COLOR = "#4F86F7";
-const RETURN_CHINA_COLOR = "#F97316";
+const STAY_US_COLOR = "#3C5CCF";
+const RETURN_CHINA_COLOR = "#D72638";
 
 export default function DimensionChartClient({ contributions }: DimensionChartClientProps) {
   const rankedContributions = [...contributions].sort((left, right) => {
@@ -33,11 +33,11 @@ export default function DimensionChartClient({ contributions }: DimensionChartCl
       type: "value",
       splitLine: {
         lineStyle: {
-          color: "#d9e1e7"
+          color: "#EADFCE"
         }
       },
       axisLabel: {
-        color: "#506172",
+        color: "#625D55",
         fontSize: 11
       }
     },
