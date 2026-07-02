@@ -42,16 +42,7 @@ const config: Config = {
         "home-border": "rgb(var(--color-home-border) / <alpha-value>)",
 
         // Legacy names retain their exact rendered values until each page migrates.
-        mist: "rgb(var(--color-legacy-mist) / <alpha-value>)",
-        "legacy-mist": "rgb(var(--color-legacy-mist) / <alpha-value>)",
-        "legacy-home-blue": "rgb(var(--color-legacy-home-blue) / <alpha-value>)",
-        slateBlue: "rgb(var(--color-legacy-slate-blue) / <alpha-value>)",
-        teal: "rgb(var(--color-legacy-teal) / <alpha-value>)",
-        "legacy-slate-blue": "rgb(var(--color-legacy-slate-blue) / <alpha-value>)",
-        "legacy-slate-blue-hover": "rgb(var(--color-legacy-slate-blue-hover) / <alpha-value>)",
-        "legacy-teal": "rgb(var(--color-legacy-teal) / <alpha-value>)",
-        sand: "rgb(var(--color-canvas) / <alpha-value>)",
-        coral: "rgb(var(--color-accent-warm) / <alpha-value>)"
+        "legacy-teal": "rgb(var(--color-legacy-teal) / <alpha-value>)"
       },
       borderRadius: {
         control: "var(--radius-control)",
