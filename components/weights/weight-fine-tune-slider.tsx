@@ -6,6 +6,7 @@ type WeightFineTuneSliderProps = {
   value: number;
   totalBudget: number;
   maxWeight: number;
+  helperMessage: string;
   onChange: (dimensionId: DimensionId, value: number) => void;
 };
 
@@ -14,6 +15,7 @@ export function WeightFineTuneSlider({
   value,
   totalBudget,
   maxWeight,
+  helperMessage,
   onChange
 }: WeightFineTuneSliderProps) {
   const percentage = getWeightPercentage(value, totalBudget);
@@ -48,6 +50,8 @@ export function WeightFineTuneSlider({
         <span>Minimum priority</span>
         <span>Maximum possible share</span>
       </div>
+
+      <p className="mt-3 text-sm leading-6 text-ink/70">{helperMessage}</p>
     </div>
   );
 }

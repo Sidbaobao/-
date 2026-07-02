@@ -119,7 +119,6 @@ export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange
 
   const activeDimension = dimensions.find((dimension) => dimension.id === activeDimensionId) ?? dimensions[0];
   const activeWeight = weights[activeDimension.id];
-  const activePercentage = getWeightPercentage(activeWeight, totalBudget);
   const maxWeight = getMaxWeight(totalBudget, dimensions.length);
   const activeCanIncrease = canIncreaseWeight(weights, activeDimension.id, dimensionIds);
   const activeCanDecrease = canDecreaseWeight(weights, activeDimension.id);
@@ -231,18 +230,13 @@ export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange
         </div>
       </div>
 
-      <div className="mt-5 grid gap-4 lg:grid-cols-[1fr_1.25fr] lg:items-start">
-        <div className="rounded-card border border-border bg-surface-strong/75 p-4 text-sm leading-6 text-ink/70">
-          <span className="font-semibold text-ink">{activeDimension.label}</span> is currently{" "}
-          <span className="font-semibold text-action-primary">{activePercentage}%</span> of your priority mix.{" "}
-          {boundaryMessage}
-        </div>
-
+      <div className="mt-5">
         <WeightFineTuneSlider
           dimension={activeDimension}
           value={activeWeight}
           totalBudget={totalBudget}
           maxWeight={maxWeight}
+          helperMessage={boundaryMessage}
           onChange={handleFineTuneChange}
         />
       </div>
