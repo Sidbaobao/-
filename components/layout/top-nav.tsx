@@ -49,7 +49,7 @@ function NavLinks({ pathname, isHome, unlockState }: NavLinksProps) {
         ? "font-medium text-surface-strong"
         : "text-surface-strong/70 hover:text-surface-strong"
       : isActive
-        ? "font-medium text-legacy-slate-blue"
+        ? "font-medium text-action-primary"
         : "text-ink/70 hover:text-ink";
 
     const statusIcon = item.requirement === "none" ? null : (

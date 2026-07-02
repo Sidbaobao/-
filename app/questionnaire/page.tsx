@@ -116,7 +116,7 @@ function DimensionProgressRing({
           strokeDashoffset={dashOffset}
           strokeLinecap="round"
           transform={`rotate(-90 ${center} ${center})`}
-          className="transition-all duration-300"
+          className="transition-[stroke-dashoffset] duration-motion-emphasis ease-interaction motion-reduce:transition-none"
         />
         {isComplete ? (
           <path
@@ -249,7 +249,7 @@ export default function QuestionnairePage() {
         </div>
         <div className="h-2 rounded-pill bg-action-primary/10">
           <div
-            className="h-2 rounded-pill bg-action-primary transition-all duration-300"
+            className="h-2 rounded-pill bg-action-primary transition-[width] duration-motion-emphasis ease-interaction motion-reduce:transition-none"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -274,12 +274,13 @@ export default function QuestionnairePage() {
                   key={group.dimension.id}
                   type="button"
                   onClick={() => setCurrentStepIndex(index)}
-                  className={`min-w-64 rounded-tile border p-4 text-left transition ${
+                  data-selected={isCurrent ? "true" : "false"}
+                  className={`interaction-option min-w-64 rounded-tile border p-4 text-left ${
                     isCurrent
-                      ? "border-accent-warm/50 bg-surface-selected text-ink shadow-legacy-sm"
+                      ? "border-accent-warm/50 bg-surface-selected text-ink"
                       : isComplete
-                        ? "border-action-primary/30 bg-surface-strong/85 text-ink hover:border-action-primary/45"
-                        : "border-ink/10 bg-surface-raised text-ink/65 hover:border-accent-warm/35"
+                        ? "border-action-primary/30 bg-surface-strong/85 text-ink"
+                        : "border-ink/10 bg-surface-raised text-ink/65"
                   }`}
                   aria-current={isCurrent ? "step" : undefined}
                 >

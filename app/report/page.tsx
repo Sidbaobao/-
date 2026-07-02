@@ -62,7 +62,7 @@ export default function ReportPage() {
         </Link>
         <Link
           href="/questionnaire"
-          className="interaction-quiet -mx-1 rounded-control px-1 py-1 text-sm font-medium text-slateBlue hover:text-legacy-slate-blue-hover"
+          className="interaction-quiet -mx-1 rounded-control px-1 py-1 text-sm font-medium text-action-primary hover:text-action-primary-hover"
         >
           Change answers
         </Link>
