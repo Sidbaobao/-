@@ -244,6 +244,7 @@ export default function QuestionnairePage() {
           <span>
             {completedCount} of {questions.length} answered
           </span>
+          <span>{questions.length - completedCount} remaining</span>
           <span>{progressPercent}% complete</span>
         </div>
         <div className="h-2 rounded-pill bg-action-primary/10">
@@ -253,26 +254,6 @@ export default function QuestionnairePage() {
           />
         </div>
       </div>
-
-      <SectionCard
-        title="Your progress"
-        description={
-          canContinue
-            ? "All questions are complete. You can continue to priority weights."
-            : `${completedCount} of ${questions.length} questions answered. Complete the remaining questions to continue.`
-        }
-      >
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-sm">
-          <span className="font-medium text-ink">{progressPercent}% complete</span>
-          <span className="text-ink/60">{questions.length - completedCount} remaining</span>
-        </div>
-        <div className="h-3 rounded-pill bg-legacy-mist">
-          <div
-            className="h-3 rounded-pill bg-legacy-slate-blue transition-all"
-            style={{ width: `${progressPercent}%` }}
-          />
-        </div>
-      </SectionCard>
 
       <SectionCard
         title="Questionnaire steps"
