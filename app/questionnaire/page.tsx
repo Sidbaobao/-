@@ -88,13 +88,13 @@ function DimensionProgressRing({
           ? "bg-action-primary/10 p-1 shadow-legacy-sm"
           : "bg-surface-strong/70 p-0.5"
       }`}
+      role="img"
       aria-label={`${answeredCount} of ${totalCount} questions answered`}
     >
       <svg
         width={size}
         height={size}
         viewBox={`0 0 ${size} ${size}`}
-        role="img"
         aria-hidden="true"
       >
         <circle

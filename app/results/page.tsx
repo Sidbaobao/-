@@ -240,7 +240,7 @@ export default function ResultsPage() {
                   <span className="text-sm font-medium text-ink/65">Confidence</span>
                   <span className="text-sm font-semibold capitalize text-ink">{scoringResult.confidence}</span>
                 </div>
-                <div className="mt-3 flex gap-2" aria-label={`${scoringResult.confidence} confidence`}>
+                <div className="mt-3 flex gap-2" role="img" aria-label={`${scoringResult.confidence} confidence`}>
                   {[1, 2, 3].map((step) => {
                     const isFilled = step <= confidenceSteps;
 
