@@ -57,9 +57,9 @@ export default function HomePage() {
         <div className="mx-auto flex w-full max-w-6xl flex-col">
           <div className="max-w-3xl">
             <p className="text-sm font-medium uppercase tracking-[0.16em] text-accent-warm">How it works</p>
-            <h1 className="mt-3 text-4xl font-semibold leading-tight text-surface-strong sm:text-5xl">
+            <h2 className="mt-3 text-4xl font-semibold leading-tight text-surface-strong sm:text-5xl">
               Three steps. Clear reasoning.
-            </h1>
+            </h2>
             <p className="mt-3 text-base leading-7 text-surface-strong/68">
               Your answers and priorities stay visible from start to finish.
             </p>

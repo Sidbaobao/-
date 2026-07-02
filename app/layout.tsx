@@ -17,9 +17,26 @@ const fraunces = Fraunces({
   display: "swap"
 });
 
+const siteDescription =
+  "A decision-support tool that helps Chinese international students think through whether to stay in the US or return to China.";
+
 export const metadata: Metadata = {
-  title: "Stay or Return",
-  description: "A beginner-friendly decision-support web app scaffold."
+  title: {
+    default: "Stay or Return",
+    template: "%s · Stay or Return"
+  },
+  description: siteDescription,
+  openGraph: {
+    title: "Stay or Return",
+    description: siteDescription,
+    type: "website",
+    siteName: "Stay or Return"
+  },
+  twitter: {
+    card: "summary",
+    title: "Stay or Return",
+    description: siteDescription
+  }
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
