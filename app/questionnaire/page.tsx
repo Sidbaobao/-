@@ -336,7 +336,7 @@ export default function QuestionnairePage() {
       <div className="flex flex-col gap-3 rounded-card border border-ink/10 bg-surface-strong p-4 shadow-legacy-sm sm:flex-row sm:items-center sm:justify-between">
         <Link
           href="/"
-          className="inline-flex min-h-11 items-center justify-center rounded-pill px-5 text-sm font-medium text-ink/65 transition hover:bg-legacy-mist hover:text-ink sm:justify-start"
+          className="interaction-quiet -mx-1 self-center rounded-control px-1 py-1 text-sm font-medium text-ink/70 hover:text-ink sm:self-auto"
         >
           Back to home
         </Link>

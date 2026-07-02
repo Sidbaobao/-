@@ -61,7 +61,10 @@ export default function WeightsPage() {
       />
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <Link href="/questionnaire" className="text-sm font-medium text-ink/70 hover:text-ink">
+        <Link
+          href="/questionnaire"
+          className="interaction-quiet -mx-1 self-center rounded-control px-1 py-1 text-sm font-medium text-ink/70 hover:text-ink sm:self-auto"
+        >
           Back to questionnaire
         </Link>
         <PrimaryButton onClick={handleSave} className="w-full sm:w-auto">
