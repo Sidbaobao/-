@@ -11,7 +11,7 @@ type PrimaryButtonButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const sharedClassName =
-  "inline-flex min-h-11 max-w-full items-center justify-center rounded-control bg-legacy-slate-blue px-5 py-3 text-center text-sm font-semibold leading-5 text-surface-strong hover:bg-legacy-slate-blue-hover disabled:cursor-not-allowed disabled:opacity-60";
+  "interaction-primary inline-flex min-h-11 max-w-full items-center justify-center rounded-control bg-action-primary px-5 py-3 text-center text-sm font-semibold leading-5 text-surface-strong disabled:cursor-not-allowed disabled:opacity-60";
 
 export function PrimaryButtonLink({ href, children }: PrimaryButtonLinkProps) {
   return (

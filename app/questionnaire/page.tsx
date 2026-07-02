@@ -365,7 +365,7 @@ export default function QuestionnairePage() {
             <button
               type="button"
               onClick={goToPreviousStep}
-              className="inline-flex min-h-11 items-center justify-center rounded-pill border border-ink/10 px-5 text-sm font-medium text-ink transition hover:border-ink/20 hover:bg-legacy-mist"
+              className="interaction-secondary inline-flex min-h-11 items-center justify-center rounded-pill border border-ink/10 px-5 text-sm font-medium text-ink"
             >
               Previous
             </button>

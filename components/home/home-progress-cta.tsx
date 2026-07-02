@@ -19,7 +19,7 @@ type HomeProgressCtaProps = {
 };
 
 const buttonClassName =
-  "inline-flex min-h-11 max-w-full items-center justify-center rounded-control bg-action-primary px-5 py-3 text-center text-sm font-semibold leading-5 text-surface-strong hover:bg-action-primary-hover";
+  "interaction-primary inline-flex min-h-11 max-w-full items-center justify-center rounded-control bg-action-primary px-5 py-3 text-center text-sm font-semibold leading-5 text-surface-strong";
 
 export function HomeProgressCta({ align = "center" }: HomeProgressCtaProps) {
   const router = useRouter();
@@ -56,7 +56,10 @@ export function HomeProgressCta({ align = "center" }: HomeProgressCtaProps) {
           Start a new questionnaire
         </button>
         {canReviewResults ? (
-          <Link href="/results" className="text-xs font-medium leading-5 text-current opacity-65 hover:opacity-100">
+          <Link
+            href="/results"
+            className="interaction-quiet rounded-control px-1 text-xs font-medium leading-5 text-current opacity-65 hover:opacity-100"
+          >
             Or review your last results
           </Link>
         ) : null}
@@ -73,7 +76,7 @@ export function HomeProgressCta({ align = "center" }: HomeProgressCtaProps) {
         <button
           type="button"
           onClick={handleStartOver}
-          className="text-xs font-medium leading-5 text-current opacity-65 hover:opacity-100"
+          className="interaction-quiet rounded-control px-1 text-xs font-medium leading-5 text-current opacity-65 hover:opacity-100"
         >
           Or start over
         </button>

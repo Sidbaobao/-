@@ -187,12 +187,9 @@ export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange
                   type="button"
                   onClick={() => setActiveDimensionId(dimensionId)}
                   aria-pressed={isActive}
+                  data-selected={isActive ? "true" : "false"}
                   aria-label={`${dimension.label}, ${percentage}% priority. Open fine tuning.`}
-                  className={`absolute inset-0 flex flex-col items-center justify-center rounded-pill border p-4 text-center transition-all duration-300 motion-reduce:transition-none ${
-                    isActive
-                      ? "shadow-soft ring-2 ring-accent-warm/30"
-                      : "shadow-legacy-sm hover:shadow-soft"
-                  }`}
+                  className="interaction-bubble absolute inset-0 flex flex-col items-center justify-center rounded-pill border p-4 text-center"
                   style={{
                     backgroundColor: getColorWithAlpha(color, fillAlpha),
                     borderColor: getColorWithAlpha(color, isActive ? 0.8 : 0.35),
@@ -214,7 +211,7 @@ export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange
                     onClick={() => handleStepChange(dimensionId, "decrease")}
                     disabled={!canDecrease}
                     aria-label={`Decrease ${dimension.label} priority`}
-                    className="flex h-8 w-8 items-center justify-center rounded-pill border border-surface-strong/80 bg-surface-strong/90 text-sm font-bold text-ink shadow-legacy-sm transition hover:bg-surface-strong disabled:cursor-not-allowed disabled:opacity-40"
+                    className="interaction-stepper flex h-8 w-8 items-center justify-center rounded-pill border border-surface-strong/80 bg-surface-strong/90 text-sm font-bold text-ink disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     -
                   </button>
@@ -223,7 +220,7 @@ export function WeightBubbleCluster({ dimensions, weights, totalBudget, onChange
                     onClick={() => handleStepChange(dimensionId, "increase")}
                     disabled={!canIncrease}
                     aria-label={`Increase ${dimension.label} priority`}
-                    className="flex h-8 w-8 items-center justify-center rounded-pill border border-surface-strong/80 bg-surface-strong/90 text-sm font-bold text-ink shadow-legacy-sm transition hover:bg-surface-strong disabled:cursor-not-allowed disabled:opacity-40"
+                    className="interaction-stepper flex h-8 w-8 items-center justify-center rounded-pill border border-surface-strong/80 bg-surface-strong/90 text-sm font-bold text-ink disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     +
                   </button>

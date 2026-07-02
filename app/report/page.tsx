@@ -54,10 +54,16 @@ export default function ReportPage() {
       />
 
       <div className="memo-screen-actions flex flex-wrap items-center justify-between gap-3">
-        <Link href="/results" className="text-sm font-medium text-ink/70 hover:text-ink">
+        <Link
+          href="/results"
+          className="interaction-quiet -mx-1 rounded-control px-1 py-1 text-sm font-medium text-ink/70 hover:text-ink"
+        >
           Back to results
         </Link>
-        <Link href="/questionnaire" className="text-sm font-medium text-slateBlue hover:text-legacy-slate-blue-hover">
+        <Link
+          href="/questionnaire"
+          className="interaction-quiet -mx-1 rounded-control px-1 py-1 text-sm font-medium text-slateBlue hover:text-legacy-slate-blue-hover"
+        >
           Change answers
         </Link>
       </div>

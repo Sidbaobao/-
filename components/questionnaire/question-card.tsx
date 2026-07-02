@@ -21,10 +21,11 @@ export function QuestionCard({ question, value, onChange }: QuestionCardProps) {
           return (
             <label
               key={option.id}
-              className={`group block cursor-pointer rounded-option border px-5 py-4 transition duration-200 focus-within:ring-2 focus-within:ring-accent-warm/30 focus-within:ring-offset-2 focus-within:ring-offset-canvas ${
+              data-selected={isSelected ? "true" : "false"}
+              className={`interaction-option group block cursor-pointer rounded-option border px-5 py-4 ${
                 isSelected
-                  ? "border-accent-warm/70 bg-surface-selected shadow-legacy-sm"
-                  : "border-ink/10 bg-surface-raised hover:border-accent-warm/40 hover:bg-surface-strong hover:shadow-legacy-sm"
+                  ? "border-accent-warm/70 bg-surface-selected"
+                  : "border-ink/10 bg-surface-raised"
               }`}
             >
               <input
@@ -37,14 +38,14 @@ export function QuestionCard({ question, value, onChange }: QuestionCardProps) {
               />
               <div className="flex items-start gap-4">
                 <span
-                  className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-pill border transition ${
+                  className={`mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-pill border transition-[border-color,background-color,box-shadow,color] duration-motion-standard ease-interaction motion-reduce:transition-none ${
                     isSelected
-                      ? "border-accent-warm bg-accent-warm text-surface-strong"
+                      ? "border-accent-warm bg-accent-warm text-surface-strong ring-4 ring-accent-warm/10"
                       : "border-ink/20 bg-surface-strong group-hover:border-accent-warm/50"
                   }`}
                 >
                   <span
-                    className={`h-2 w-2 rounded-pill bg-current transition ${
+                    className={`h-2 w-2 rounded-pill bg-current transition-[transform,opacity] duration-motion-standard ease-interaction motion-reduce:transition-none ${
                       isSelected ? "scale-100 opacity-100" : "scale-0 opacity-0"
                     }`}
                   />

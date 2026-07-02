@@ -41,7 +41,7 @@ export function WeightFineTuneSlider({
         value={value}
         onChange={(event) => onChange(dimension.id, Number(event.target.value))}
         aria-label={`Fine tune ${dimension.label} priority`}
-        className="mt-5 w-full accent-action-primary"
+        className="interaction-range mt-5 w-full"
       />
 
       <div className="mt-2 flex justify-between gap-4 text-xs leading-5 text-ink/55">

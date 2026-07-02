@@ -15,8 +15,8 @@ function VideoPanel({ accentClassName, label, shouldPlayVideo, supportingText, s
   const [hasVideoError, setHasVideoError] = useState(false);
 
   return (
-    <div>
-      <div className="relative min-h-[34rem] overflow-hidden rounded-tile bg-hero shadow-soft sm:min-h-[42rem] lg:min-h-[48rem]">
+    <div className="rounded-card border border-home-border/25 bg-home-surface/75 p-3 shadow-home-glow backdrop-blur-sm">
+      <div className="relative min-h-[34rem] overflow-hidden rounded-tile bg-hero sm:min-h-[42rem] lg:min-h-[48rem]">
         {!hasVideoError ? (
           <video
             aria-hidden="true"
@@ -33,10 +33,10 @@ function VideoPanel({ accentClassName, label, shouldPlayVideo, supportingText, s
         ) : null}
       </div>
 
-      <div className="pt-5">
+      <div className="px-2 pb-2 pt-5">
         <div className={`mb-4 h-1 w-16 rounded-pill ${accentClassName}`} />
-        <h3 className="text-3xl font-semibold leading-tight text-ink sm:text-4xl">{label}</h3>
-        <p className="mt-2 max-w-md text-sm leading-6 text-ink/68 sm:text-base">{supportingText}</p>
+        <h3 className="text-3xl font-semibold leading-tight text-surface-strong sm:text-4xl">{label}</h3>
+        <p className="mt-2 max-w-md text-sm leading-6 text-surface-strong/64 sm:text-base">{supportingText}</p>
       </div>
     </div>
   );
@@ -79,12 +79,11 @@ export function TwoPathsVideoSection() {
     <section ref={sectionRef} className="py-16 lg:py-24" aria-labelledby="two-paths-heading">
       <div className="mx-auto max-w-3xl text-center">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-accent-warm">Two paths</p>
-        <h2 id="two-paths-heading" className="mt-3 text-4xl font-semibold leading-tight text-ink sm:text-5xl">
-          Make both futures concrete before you compare them.
+        <h2 id="two-paths-heading" className="mt-3 text-4xl font-semibold leading-tight text-surface-strong sm:text-5xl">
+          See both paths clearly.
         </h2>
-        <p className="mt-4 text-base leading-7 text-ink/72">
-          The goal is not to romanticize either path. It is to pause, see both directions clearly, and then answer with
-          your real constraints in mind.
+        <p className="mt-4 text-base leading-7 text-surface-strong/68">
+          Picture each future before you weigh the tradeoffs.
         </p>
       </div>
 
@@ -108,7 +107,7 @@ export function TwoPathsVideoSection() {
       <div className="mt-8 flex justify-center">
         <Link
           href="/questionnaire"
-          className="inline-flex min-h-11 max-w-full items-center justify-center rounded-control bg-action-primary px-5 py-3 text-center text-sm font-semibold leading-5 text-surface-strong hover:bg-action-primary-hover"
+          className="interaction-primary inline-flex min-h-11 max-w-full items-center justify-center rounded-control bg-action-primary px-5 py-3 text-center text-sm font-semibold leading-5 text-surface-strong"
         >
           Start questionnaire
         </Link>

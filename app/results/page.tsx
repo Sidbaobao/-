@@ -385,7 +385,7 @@ export default function ResultsPage() {
       </section>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <section className="rounded-feature border border-ink/10 bg-surface-strong p-5 shadow-legacy-sm sm:p-6">
+        <section className="interaction-card rounded-feature border border-ink/10 bg-surface-strong p-5 shadow-legacy-sm sm:p-6">
           <h2 className="font-serif text-2xl font-semibold text-ink">Total score comparison</h2>
           <p className="mt-2 text-sm text-ink/60">Compare the two weighted totals.</p>
           <div className="mt-5">
@@ -396,7 +396,7 @@ export default function ResultsPage() {
           </div>
         </section>
 
-        <section className="rounded-feature border border-ink/10 bg-surface-strong p-5 shadow-legacy-sm sm:p-6">
+        <section className="interaction-card rounded-feature border border-ink/10 bg-surface-strong p-5 shadow-legacy-sm sm:p-6">
           <h2 className="font-serif text-2xl font-semibold text-ink">Dimension contributions</h2>
           <p className="mt-2 text-sm text-ink/60">See which dimensions move the result.</p>
           <div className="mt-5">
@@ -405,7 +405,7 @@ export default function ResultsPage() {
         </section>
       </div>
 
-      <section className="rounded-feature border border-ink/10 bg-surface-strong p-5 shadow-legacy-sm sm:p-6">
+      <section className="interaction-card rounded-feature border border-ink/10 bg-surface-strong p-5 shadow-legacy-sm sm:p-6">
         <h2 className="font-serif text-2xl font-semibold text-ink">Shape comparison</h2>
         <p className="mt-2 text-sm text-ink/60">Compare each path across all dimensions.</p>
         <div className="mt-5">
@@ -413,7 +413,7 @@ export default function ResultsPage() {
         </div>
       </section>
 
-      <details className="group rounded-feature border border-border bg-surface/70 shadow-legacy-sm">
+      <details className="interaction-disclosure group rounded-feature border border-border bg-surface/70 shadow-legacy-sm">
         <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 sm:p-6">
           <div>
             <h2 className="font-serif text-xl font-semibold text-ink sm:text-2xl">More detail</h2>
@@ -421,7 +421,7 @@ export default function ResultsPage() {
           </div>
           <ChevronDown
             aria-hidden="true"
-            className="h-5 w-5 shrink-0 text-ink/55 transition group-open:rotate-180"
+            className="h-5 w-5 shrink-0 text-ink/55 transition-transform duration-motion-standard ease-interaction group-open:rotate-180 motion-reduce:transition-none"
           />
         </summary>
 
@@ -482,7 +482,7 @@ export default function ResultsPage() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <Link
             href="/weights"
-            className="inline-flex min-h-11 items-center justify-center rounded-control px-5 py-3 text-sm font-medium text-ink/70 hover:bg-legacy-mist hover:text-ink"
+            className="interaction-secondary inline-flex min-h-11 items-center justify-center rounded-control px-5 py-3 text-sm font-medium text-ink/70"
           >
             Adjust weights
           </Link>

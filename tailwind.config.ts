@@ -37,6 +37,9 @@ const config: Config = {
         "accent-warm": "rgb(var(--color-accent-warm) / <alpha-value>)",
         hero: "rgb(var(--color-hero) / <alpha-value>)",
         "hero-raised": "rgb(var(--color-hero-raised) / <alpha-value>)",
+        "home-surface": "rgb(var(--color-home-surface) / <alpha-value>)",
+        "home-surface-raised": "rgb(var(--color-home-surface-raised) / <alpha-value>)",
+        "home-border": "rgb(var(--color-home-border) / <alpha-value>)",
 
         // Legacy names retain their exact rendered values until each page migrates.
         mist: "rgb(var(--color-legacy-mist) / <alpha-value>)",
@@ -87,7 +90,16 @@ const config: Config = {
         "legacy-sm": "var(--shadow-legacy-sm)",
         subtle: "var(--shadow-subtle)",
         card: "var(--shadow-card)",
-        feature: "var(--shadow-feature)"
+        feature: "var(--shadow-feature)",
+        "home-glow": "var(--shadow-home-glow)"
+      },
+      transitionDuration: {
+        "motion-fast": "var(--motion-duration-fast)",
+        "motion-standard": "var(--motion-duration-standard)",
+        "motion-emphasis": "var(--motion-duration-emphasis)"
+      },
+      transitionTimingFunction: {
+        interaction: "var(--motion-ease-interaction)"
       },
       fontSize: {
         display: ["var(--text-display)", { lineHeight: "var(--leading-display)" }],

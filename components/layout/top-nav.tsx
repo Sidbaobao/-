@@ -67,7 +67,7 @@ function NavLinks({ pathname, isHome, unlockState }: NavLinksProps) {
           key={item.href}
           href={item.href}
           aria-current={isActive ? "page" : undefined}
-          className={`${baseClassName} ${unlockedClassName}`}
+          className={`${baseClassName} interaction-nav -mx-1 rounded-control px-1 py-1 ${unlockedClassName}`}
         >
           {statusIcon}
           {item.label}
@@ -128,7 +128,12 @@ export function TopNav() {
     >
       <div className="mx-auto w-full max-w-6xl px-4 py-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-4">
-          <Link href="/" className={isHome ? "text-lg font-semibold text-surface-strong" : "text-lg font-semibold text-ink"}>
+          <Link
+            href="/"
+            className={`interaction-quiet rounded-control text-lg font-semibold ${
+              isHome ? "text-surface-strong" : "text-ink"
+            }`}
+          >
             Stay or Return
           </Link>
 
