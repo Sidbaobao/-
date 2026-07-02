@@ -3,5 +3,6 @@ dist
 .env
 .next/
 .next
-.agents/ 
-output/ 
+.agents/
+output/
+tsconfig.tsbuildinfo
