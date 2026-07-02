@@ -1,3 +1,9 @@
+import {
+  FileText,
+  ListChecks,
+  SlidersHorizontal,
+  type LucideIcon
+} from "lucide-react";
 import { HeroSection } from "@/components/home/hero-section";
 import { HomeProgressCta } from "@/components/home/home-progress-cta";
 import { TwoPathsVideoSection } from "@/components/home/two-paths-video-section";
@@ -11,21 +17,9 @@ type StepSectionProps = {
   guideLabel: string;
   highlights: string[];
   imageSide: "left" | "right";
+  Icon: LucideIcon;
+  iconClassName: string;
 };
-
-function HighlightIcon() {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 16 16"
-      className="mt-0.5 h-4 w-4 shrink-0 text-legacy-home-blue"
-      fill="none"
-    >
-      <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" />
-      <path d="M5.5 8.2 7.2 9.9 10.8 6.3" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" />
-    </svg>
-  );
-}
 
 function StepSection({
   step,
@@ -35,7 +29,9 @@ function StepSection({
   previewLabel,
   guideLabel,
   highlights,
-  imageSide
+  imageSide,
+  Icon,
+  iconClassName
 }: StepSectionProps) {
   const imageOrder = imageSide === "left" ? "lg:order-1" : "lg:order-2";
   const textOrder = imageSide === "left" ? "lg:order-2" : "lg:order-1";
@@ -60,7 +56,11 @@ function StepSection({
         <div className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
           {highlights.map((highlight) => (
             <div key={highlight} className="flex items-start gap-3 rounded-control border border-surface-strong/70 bg-surface-strong/70 p-4">
-              <HighlightIcon />
+              <span
+                className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-control ${iconClassName}`}
+              >
+                <Icon aria-hidden="true" strokeWidth={1.8} className="h-4 w-4" />
+              </span>
               <p className="text-sm font-medium leading-6 text-ink/72">{highlight}</p>
             </div>
           ))}
@@ -77,7 +77,7 @@ export default function HomePage() {
 
       <section
         id="how-it-works"
-        className="relative -mt-16 bg-gradient-to-b from-transparent via-canvas to-canvas px-4 pb-16 pt-32 sm:px-6 lg:px-8"
+        className="relative -mt-20 bg-gradient-to-b from-transparent via-surface-warm to-canvas px-4 pb-16 pt-32 sm:px-6 lg:px-8"
       >
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
           <div className="max-w-3xl">
@@ -101,6 +101,8 @@ export default function HomePage() {
               guideLabel="Step 1 of 3"
               highlights={["6 decision dimensions", "28 practical questions", "Every option scores both paths"]}
               imageSide="right"
+              Icon={ListChecks}
+              iconClassName="bg-action-primary/10 text-action-primary"
             />
 
             <StepSection
@@ -112,6 +114,8 @@ export default function HomePage() {
               guideLabel="Step 2 of 3"
               highlights={["Adjustable weight per dimension", "Your priorities, not a fixed formula", "Change weights anytime"]}
               imageSide="left"
+              Icon={SlidersHorizontal}
+              iconClassName="bg-accent-warm/10 text-accent-warm"
             />
 
             <StepSection
@@ -123,6 +127,8 @@ export default function HomePage() {
               guideLabel="Step 3 of 3"
               highlights={["Transparent score breakdown", "Charts show what drives the result", "A structured memo, not a verdict"]}
               imageSide="right"
+              Icon={FileText}
+              iconClassName="bg-path-return/10 text-path-return"
             />
           </div>
 

@@ -5,10 +5,18 @@ import { HomeProgressCta } from "@/components/home/home-progress-cta";
 export function HeroSection() {
   return (
     <section className="relative isolate min-h-[88svh] overflow-hidden bg-hero text-surface-strong">
-      <DecisionMapCanvas />
+      <div className="absolute inset-0 [mask-image:linear-gradient(to_bottom,#000_0%,#000_66%,rgba(0,0,0,0.74)_76%,rgba(0,0,0,0.28)_88%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,#000_0%,#000_66%,rgba(0,0,0,0.74)_76%,rgba(0,0,0,0.28)_88%,transparent_100%)]">
+        <DecisionMapCanvas />
+      </div>
 
       <div className="absolute inset-0" style={{ backgroundImage: "var(--gradient-hero-vignette)" }} />
-      <div className="absolute inset-x-0 bottom-0 h-[18vh] bg-gradient-to-b from-transparent via-hero-raised/72 to-canvas" />
+      <div
+        className="absolute inset-x-0 bottom-0 h-[34vh]"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgb(var(--color-hero) / 0) 0%, rgb(var(--color-hero) / 0.22) 16%, rgb(var(--color-hero-raised) / 0.96) 38%, color-mix(in srgb, rgb(var(--color-hero-raised)) 68%, rgb(var(--color-accent-warm)) 32%) 56%, rgb(var(--color-surface-warm) / 0.98) 82%, rgb(var(--color-canvas) / 1) 100%)"
+        }}
+      />
 
       <div className="relative z-10 mx-auto flex min-h-[88svh] w-full max-w-6xl flex-col items-center justify-center px-4 pb-28 pt-28 text-center sm:px-6 lg:px-8">
         <p className="text-sm font-medium uppercase tracking-[0.16em] text-surface-strong/62">Decision support for reflection</p>
